@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PROERD - Sistema Educacional Interativo</title>
+    <title>PROERD - Programa Educacional de Resistência às Drogas e à Violência</title>
     <style>
         * {
             margin: 0;
@@ -509,6 +509,7 @@
             <button class="nav-btn" onclick="showScreen('games')">🎯 Jogos</button>
             <button class="nav-btn" onclick="showScreen('about')">📚 Sobre PROERD</button>
             <button class="nav-btn" onclick="showScreen('partners')">🤝 Parceiros</button>
+            <button class="nav-btn" onclick="showScreen('battalion')">🏛️ 6º BPM</button>
             <button class="nav-btn" onclick="showScreen('admin-login')">👨‍💼 Admin</button>
         </div>
 
@@ -520,9 +521,9 @@
             </div>
             
             <div class="developer-info">
-                <p><strong>Desenvolvido por:</strong> Soldado Pappette</p>
+                <p><strong>Desenvolvido por:</strong> Wellington Oliveira</p>
                 <p><strong>6º Batalhão de Polícia Militar de Mato Grosso do Sul</strong></p>
-                <p>Sistema Interativo de Educação e Prevenção</p>
+                <p>Programa Educacional de Resistência às Drogas e à Violência</p>
             </div>
             
             <div class="lion-character">🦁</div>
@@ -660,26 +661,93 @@
             
             <div id="partners-list">
                 <div class="partner-card">
-                    <div class="partner-logo">🏫</div>
+                    <div class="partner-logo">
+                        <img src="https://via.placeholder.com/80x80/4ECDC4/FFFFFF?text=LHG" alt="LHG Mining" class="partner-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <div style="display: none; width: 80px; height: 80px; background: #4ECDC4; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">LHG</div>
+                    </div>
                     <div>
-                        <h3>Secretaria de Educação</h3>
-                        <p>Parceria fundamental para levar o PROERD às escolas estaduais e municipais.</p>
+                        <h3>LHG Mining Corumbá</h3>
+                        <p>Empresa parceira no desenvolvimento sustentável e responsabilidade social em Corumbá.</p>
+                        <a href="https://lhgmining.com.br/" target="_blank" style="color: #4ECDC4; text-decoration: none;">🌐 lhgmining.com.br</a>
                     </div>
                 </div>
                 <div class="partner-card">
-                    <div class="partner-logo">🏥</div>
+                    <div class="partner-logo">
+                        <img src="https://via.placeholder.com/80x80/00A859/FFFFFF?text=SICREDI" alt="Sicredi" class="partner-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <div style="display: none; width: 80px; height: 80px; background: #00A859; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.8em;">SICREDI</div>
+                    </div>
                     <div>
-                        <h3>Secretaria de Saúde</h3>
-                        <p>Apoio na prevenção e tratamento de questões relacionadas ao uso de substâncias.</p>
+                        <h3>Sicredi - Agência de Corumbá</h3>
+                        <p>Cooperativa de crédito comprometida com o desenvolvimento da comunidade local.</p>
+                        <a href="https://www.sicredi.com.br" target="_blank" style="color: #00A859; text-decoration: none;">🌐 sicredi.com.br</a>
                     </div>
                 </div>
                 <div class="partner-card">
-                    <div class="partner-logo">👨‍👩‍👧‍👦</div>
+                    <div class="partner-logo">
+                        <img src="https://via.placeholder.com/80x80/1E3A8A/FFFFFF?text=PMC" alt="Prefeitura de Corumbá" class="partner-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <div style="display: none; width: 80px; height: 80px; background: #1E3A8A; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">PMC</div>
+                    </div>
                     <div>
-                        <h3>Conselho Tutelar</h3>
-                        <p>Proteção integral de crianças e adolescentes em situação de risco.</p>
+                        <h3>Prefeitura Municipal de Corumbá</h3>
+                        <p>Governo municipal parceiro na implementação de políticas públicas de prevenção.</p>
+                        <a href="https://corumba.ms.gov.br/" target="_blank" style="color: #1E3A8A; text-decoration: none;">🌐 corumba.ms.gov.br</a>
                     </div>
                 </div>
+                <div class="partner-card">
+                    <div class="partner-logo">
+                        <img src="https://via.placeholder.com/80x80/059669/FFFFFF?text=PML" alt="Prefeitura de Ladário" class="partner-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <div style="display: none; width: 80px; height: 80px; background: #059669; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">PML</div>
+                    </div>
+                    <div>
+                        <h3>Prefeitura Municipal de Ladário</h3>
+                        <p>Parceria estratégica para expansão do PROERD na região metropolitana.</p>
+                        <a href="https://www.ladario.ms.gov.br/" target="_blank" style="color: #059669; text-decoration: none;">🌐 ladario.ms.gov.br</a>
+                    </div>
+                </div>
+                <div id="custom-partners-list"></div>
+            </div>
+        </div>
+
+        <!-- 6º Batalhão -->
+        <div id="battalion" class="game-screen">
+            <div class="header">
+                <h1>🏛️ 6º Batalhão de Polícia Militar</h1>
+                <p>Mato Grosso do Sul - Corumbá</p>
+            </div>
+            
+            <div class="about-content" id="battalion-content">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div id="battalion-logo-display" style="width: 120px; height: 120px; margin: 0 auto 15px; background: linear-gradient(45deg, #2C3E50, #34495E); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2em;">🏛️</div>
+                </div>
+                
+                <h2>🏛️ 6º Batalhão de Polícia Militar de Mato Grosso do Sul</h2>
+                
+                <h3>📍 Localização</h3>
+                <p>Sediado em Corumbá, o 6º BPM/MS atende uma das regiões mais estratégicas do estado, fazendo fronteira com a Bolívia e sendo porta de entrada do Pantanal.</p>
+                
+                <h3>🎯 Missão</h3>
+                <p>Garantir a segurança pública, a ordem e a tranquilidade da população de Corumbá e região, através de ações preventivas e repressivas qualificadas, sempre pautadas nos princípios da legalidade, eficiência e respeito aos direitos humanos.</p>
+                
+                <h3>🌟 Área de Atuação</h3>
+                <ul>
+                    <li>Policiamento ostensivo preventivo</li>
+                    <li>Segurança comunitária</li>
+                    <li>Programas educacionais (PROERD)</li>
+                    <li>Policiamento de fronteira</li>
+                    <li>Proteção ambiental do Pantanal</li>
+                    <li>Apoio ao turismo regional</li>
+                </ul>
+                
+                <h3>👮‍♂️ Programas Sociais</h3>
+                <p>O 6º BPM desenvolve diversos programas sociais, sendo o PROERD um dos principais, levando educação preventiva às escolas de Corumbá e região, formando cidadãos conscientes e preparados para fazer escolhas saudáveis.</p>
+                
+                <h3>🏆 Compromisso</h3>
+                <p>Nosso compromisso é servir e proteger a comunidade com excelência, profissionalismo e dedicação, contribuindo para o desenvolvimento social e econômico da região pantaneira.</p>
+                
+                <h3>📞 Contato</h3>
+                <p><strong>Endereço:</strong> Corumbá - MS<br>
+                <strong>Telefone:</strong> (67) 3234-5678<br>
+                <strong>Emergência:</strong> 190</p>
             </div>
         </div>
 
@@ -722,6 +790,20 @@
                 </div>
                 
                 <div class="admin-section">
+                    <h3>🏛️ Editar Sobre o 6º BPM</h3>
+                    <div class="form-group">
+                        <label>Logo do Batalhão:</label>
+                        <input type="file" id="battalion-logo-file" accept="image/*" onchange="handleBattalionLogoUpload(event)">
+                        <small>Formatos aceitos: PNG, JPG, JPEG</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Conteúdo sobre o 6º BPM:</label>
+                        <textarea id="battalion-editor" placeholder="Digite o conteúdo sobre o 6º BPM..."></textarea>
+                    </div>
+                    <button class="btn-admin" onclick="updateBattalion()">💾 Salvar Alterações</button>
+                </div>
+                
+                <div class="admin-section">
                     <h3>👥 Gerenciar Administradores</h3>
                     <div class="form-group">
                         <label>Novo Email:</label>
@@ -737,7 +819,33 @@
                 </div>
                 
                 <div class="admin-section">
-                    <h3>🤝 Gerenciar Parceiros</h3>
+                    <h3>🤝 Gerenciar Parceiros Principais</h3>
+                    <h4>Atualizar Logos dos Parceiros Principais:</h4>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 20px 0;">
+                        <div style="border: 1px solid #ddd; padding: 15px; border-radius: 10px;">
+                            <h5>LHG Mining Corumbá</h5>
+                            <input type="file" id="lhg-logo-file" accept="image/*" onchange="handlePartnerLogoUpload(event, 'lhg')">
+                            <small>PNG, JPG, JPEG</small>
+                        </div>
+                        <div style="border: 1px solid #ddd; padding: 15px; border-radius: 10px;">
+                            <h5>Sicredi Corumbá</h5>
+                            <input type="file" id="sicredi-logo-file" accept="image/*" onchange="handlePartnerLogoUpload(event, 'sicredi')">
+                            <small>PNG, JPG, JPEG</small>
+                        </div>
+                        <div style="border: 1px solid #ddd; padding: 15px; border-radius: 10px;">
+                            <h5>Prefeitura de Corumbá</h5>
+                            <input type="file" id="corumba-logo-file" accept="image/*" onchange="handlePartnerLogoUpload(event, 'corumba')">
+                            <small>PNG, JPG, JPEG</small>
+                        </div>
+                        <div style="border: 1px solid #ddd; padding: 15px; border-radius: 10px;">
+                            <h5>Prefeitura de Ladário</h5>
+                            <input type="file" id="ladario-logo-file" accept="image/*" onchange="handlePartnerLogoUpload(event, 'ladario')">
+                            <small>PNG, JPG, JPEG</small>
+                        </div>
+                    </div>
+                    
+                    <h4>Adicionar Outros Parceiros:</h4>
                     <div class="form-group">
                         <label>Nome do Parceiro:</label>
                         <input type="text" id="partner-name" placeholder="Nome da organização">
@@ -747,10 +855,15 @@
                         <textarea id="partner-description" placeholder="Descrição da parceria..."></textarea>
                     </div>
                     <div class="form-group">
-                        <label>Logo (URL):</label>
-                        <input type="url" id="partner-logo" placeholder="https://exemplo.com/logo.png">
+                        <label>Website (opcional):</label>
+                        <input type="url" id="partner-website" placeholder="https://exemplo.com">
                     </div>
-                    <button class="btn-admin" onclick="addPartner()">➕ Adicionar Parceiro</button>
+                    <div class="form-group">
+                        <label>Logo:</label>
+                        <input type="file" id="partner-logo-file" accept="image/*" onchange="handleCustomPartnerLogoUpload(event)">
+                        <small>PNG, JPG, JPEG</small>
+                    </div>
+                    <button class="btn-admin" onclick="addCustomPartner()">➕ Adicionar Parceiro</button>
                     
                     <div id="partners-admin-list"></div>
                 </div>
@@ -909,7 +1022,16 @@
                 { email: 'proerd6bpmms@gmail.com', password: '6bpm@102010' }
             ],
             aboutContent: '',
+            battalionContent: '',
+            battalionLogo: '',
             partners: [],
+            partnerLogos: {
+                lhg: '',
+                sicredi: '',
+                corumba: '',
+                ladario: ''
+            },
+            customPartners: [],
             logos: {
                 proerd: '',
                 pm: ''
@@ -923,6 +1045,7 @@
                 systemData = { ...systemData, ...JSON.parse(saved) };
             }
             updateAboutDisplay();
+            updateBattalionDisplay();
             updatePartnersDisplay();
         }
 
@@ -1470,8 +1593,70 @@
 
         function loadAdminData() {
             document.getElementById('about-editor').value = systemData.aboutContent;
+            document.getElementById('battalion-editor').value = systemData.battalionContent;
             updateAdminList();
             updatePartnersAdminList();
+        }
+
+        // Funções de upload de imagem
+        function handleBattalionLogoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    systemData.battalionLogo = e.target.result;
+                    saveSystemData();
+                    updateBattalionDisplay();
+                    alert('✅ Logo do batalhão atualizado com sucesso!');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function handlePartnerLogoUpload(event, partner) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    systemData.partnerLogos[partner] = e.target.result;
+                    saveSystemData();
+                    updatePartnersDisplay();
+                    alert('✅ Logo do parceiro atualizado com sucesso!');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        let customPartnerLogo = '';
+        function handleCustomPartnerLogoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    customPartnerLogo = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function updateBattalion() {
+            if (!isLoggedIn) return;
+            
+            systemData.battalionContent = document.getElementById('battalion-editor').value;
+            saveSystemData();
+            updateBattalionDisplay();
+            alert('✅ Conteúdo sobre o 6º BPM atualizado com sucesso!');
+        }
+
+        function updateBattalionDisplay() {
+            const logoDisplay = document.getElementById('battalion-logo-display');
+            if (systemData.battalionLogo) {
+                logoDisplay.innerHTML = `<img src="${systemData.battalionLogo}" alt="Logo 6º BPM" style="width: 100%; height: 100%; object-fit: contain; border-radius: 15px;">`;
+            }
+            
+            if (systemData.battalionContent) {
+                document.getElementById('battalion-content').innerHTML = systemData.battalionContent;
+            }
         }
 
         function updateAbout() {
@@ -1544,79 +1729,100 @@
             }
         }
 
-        function addPartner() {
+        function addCustomPartner() {
             if (!isLoggedIn) return;
             
             const name = document.getElementById('partner-name').value;
             const description = document.getElementById('partner-description').value;
-            const logo = document.getElementById('partner-logo').value;
+            const website = document.getElementById('partner-website').value;
             
             if (!name || !description) {
                 alert('❌ Preencha pelo menos nome e descrição!');
                 return;
             }
             
-            systemData.partners.push({ name, description, logo });
+            systemData.customPartners.push({ 
+                name, 
+                description, 
+                website,
+                logo: customPartnerLogo 
+            });
             saveSystemData();
             updatePartnersDisplay();
             updatePartnersAdminList();
             
             document.getElementById('partner-name').value = '';
             document.getElementById('partner-description').value = '';
-            document.getElementById('partner-logo').value = '';
+            document.getElementById('partner-website').value = '';
+            document.getElementById('partner-logo-file').value = '';
+            customPartnerLogo = '';
             
             alert('✅ Parceiro adicionado com sucesso!');
         }
 
         function updatePartnersDisplay() {
-            const list = document.getElementById('partners-list');
-            
-            // Manter parceiros padrão e adicionar os customizados
-            const defaultPartners = `
-                <div class="partner-card">
-                    <div class="partner-logo">🏫</div>
-                    <div>
-                        <h3>Secretaria de Educação</h3>
-                        <p>Parceria fundamental para levar o PROERD às escolas estaduais e municipais.</p>
-                    </div>
-                </div>
-                <div class="partner-card">
-                    <div class="partner-logo">🏥</div>
-                    <div>
-                        <h3>Secretaria de Saúde</h3>
-                        <p>Apoio na prevenção e tratamento de questões relacionadas ao uso de substâncias.</p>
-                    </div>
-                </div>
-                <div class="partner-card">
-                    <div class="partner-logo">👨‍👩‍👧‍👦</div>
-                    <div>
-                        <h3>Conselho Tutelar</h3>
-                        <p>Proteção integral de crianças e adolescentes em situação de risco.</p>
-                    </div>
-                </div>
-            `;
+            const customList = document.getElementById('custom-partners-list');
             
             let customPartners = '';
-            systemData.partners.forEach(partner => {
+            systemData.customPartners.forEach(partner => {
                 customPartners += `
                     <div class="partner-card">
-                        <div class="partner-logo">${partner.logo ? `<img src="${partner.logo}" alt="${partner.name}" style="width: 80px; height: 80px; object-fit: contain;">` : '🤝'}</div>
+                        <div class="partner-logo">
+                            ${partner.logo ? `<img src="${partner.logo}" alt="${partner.name}" class="partner-logo">` : '🤝'}
+                        </div>
                         <div>
                             <h3>${partner.name}</h3>
                             <p>${partner.description}</p>
+                            ${partner.website ? `<a href="${partner.website}" target="_blank" style="color: #4ECDC4; text-decoration: none;">🌐 ${partner.website.replace('https://', '').replace('http://', '')}</a>` : ''}
                         </div>
                     </div>
                 `;
             });
             
-            list.innerHTML = defaultPartners + customPartners;
+            customList.innerHTML = customPartners;
+            
+            // Atualizar logos dos parceiros principais
+            updateMainPartnersLogos();
+        }
+
+        function updateMainPartnersLogos() {
+            const partners = document.querySelectorAll('#partners-list .partner-card');
+            
+            // LHG Mining
+            if (systemData.partnerLogos.lhg && partners[0]) {
+                const img = partners[0].querySelector('img');
+                if (img) img.src = systemData.partnerLogos.lhg;
+            }
+            
+            // Sicredi
+            if (systemData.partnerLogos.sicredi && partners[1]) {
+                const img = partners[1].querySelector('img');
+                if (img) img.src = systemData.partnerLogos.sicredi;
+            }
+            
+            // Prefeitura Corumbá
+            if (systemData.partnerLogos.corumba && partners[2]) {
+                const img = partners[2].querySelector('img');
+                if (img) img.src = systemData.partnerLogos.corumba;
+            }
+            
+            // Prefeitura Ladário
+            if (systemData.partnerLogos.ladario && partners[3]) {
+                const img = partners[3].querySelector('img');
+                if (img) img.src = systemData.partnerLogos.ladario;
+            }
         }
 
         function updatePartnersAdminList() {
             const list = document.getElementById('partners-admin-list');
-            list.innerHTML = '<h4>Parceiros Cadastrados:</h4>';
+            list.innerHTML = '<h4>Parceiros Personalizados Cadastrados:</h4>';
             
-            systemData.partners.forEach((partner, index) => {
+            if (systemData.customPartners.length === 0) {
+                list.innerHTML += '<p style="color: #666; font-style: italic;">Nenhum parceiro personalizado cadastrado ainda.</p>';
+                return;
+            }
+            
+            systemData.customPartners.forEach((partner, index) => {
                 const div = document.createElement('div');
                 div.innerHTML = `
                     <div class="partner-card">
@@ -1624,7 +1830,8 @@
                         <div>
                             <h4>${partner.name}</h4>
                             <p>${partner.description}</p>
-                            <button class="btn-admin btn-danger" onclick="removePartner(${index})">🗑️ Remover</button>
+                            ${partner.website ? `<p><a href="${partner.website}" target="_blank">🌐 ${partner.website}</a></p>` : ''}
+                            <button class="btn-admin btn-danger" onclick="removeCustomPartner(${index})">🗑️ Remover</button>
                         </div>
                     </div>
                 `;
@@ -1632,9 +1839,9 @@
             });
         }
 
-        function removePartner(index) {
+        function removeCustomPartner(index) {
             if (confirm('Tem certeza que deseja remover este parceiro?')) {
-                systemData.partners.splice(index, 1);
+                systemData.customPartners.splice(index, 1);
                 saveSystemData();
                 updatePartnersDisplay();
                 updatePartnersAdminList();
@@ -1724,5 +1931,5 @@
             lastTouchEnd = now;
         }, false);
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97568f7df5d5544d',t:'MTc1NjI0NTE5MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9756a66301495442',t:'MTc1NjI0NjEyOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
