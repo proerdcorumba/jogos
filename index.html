@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jogo do PROERD - Leão Corajoso - 6 Fases</title>
+    <title>PROERD - Sistema Educacional Interativo</title>
     <style>
         * {
             margin: 0;
@@ -18,16 +18,19 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            touch-action: manipulation;
         }
 
         .game-container {
             background: white;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            max-width: 900px;
-            width: 90%;
-            padding: 30px;
+            max-width: 1000px;
+            width: 95%;
+            padding: 20px;
             text-align: center;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .header {
@@ -35,18 +38,27 @@
             color: white;
             padding: 20px;
             border-radius: 15px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .header h1 {
-            font-size: 2.5em;
+            font-size: 2.2em;
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
         .header p {
-            font-size: 1.2em;
+            font-size: 1em;
             opacity: 0.9;
+        }
+
+        .developer-info {
+            background: linear-gradient(45deg, #2C3E50, #34495E);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-size: 0.9em;
         }
 
         .game-screen {
@@ -57,9 +69,38 @@
             display: block;
         }
 
-        .lion-character {
-            font-size: 4em;
+        .navigation {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
             margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: linear-gradient(45deg, #3498DB, #2980B9);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 12px 20px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .nav-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(45deg, #E74C3C, #C0392B);
+        }
+
+        .lion-character {
+            font-size: 3em;
+            margin: 15px 0;
             animation: bounce 2s infinite;
         }
 
@@ -87,166 +128,36 @@
             text-align: center;
         }
 
-        .scenario {
-            background: #F0F8FF;
-            border: 3px solid #4ECDC4;
-            border-radius: 15px;
-            padding: 25px;
-            margin: 20px 0;
-            font-size: 1.1em;
-            line-height: 1.6;
-        }
-
-        .game-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 20px 0;
-            flex-wrap: wrap;
+        .phase-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
-        }
-
-        .player-info {
-            background: linear-gradient(45deg, #FFD700, #FFA500);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 15px;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-        }
-
-        .timer {
-            background: linear-gradient(45deg, #FF6B6B, #FF8E53);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 15px;
-            font-size: 1.3em;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-            min-width: 120px;
-        }
-
-        .timer.warning {
-            animation: pulse 1s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .phase-info {
-            background: linear-gradient(45deg, #9B59B6, #8E44AD);
-            color: white;
-            padding: 15px;
-            border-radius: 15px;
             margin: 20px 0;
-            font-weight: bold;
         }
 
-        .progress-bar {
-            background: #E0E0E0;
-            border-radius: 10px;
-            height: 20px;
-            margin: 20px 0;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            background: linear-gradient(45deg, #4ECDC4, #44A08D);
-            height: 100%;
-            transition: width 0.3s ease;
-            border-radius: 10px;
-        }
-
-        .choices {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin: 25px 0;
-        }
-
-        .choice-btn {
+        .phase-card {
             background: linear-gradient(45deg, #FF9A9E, #FECFEF);
             border: none;
-            border-radius: 25px;
-            padding: 15px 25px;
-            font-size: 1.1em;
-            font-weight: bold;
-            color: #333;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .choice-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-        }
-
-        .choice-btn:disabled {
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
-
-        .choice-btn.correct {
-            background: linear-gradient(45deg, #98FB98, #90EE90);
-        }
-
-        .choice-btn.incorrect {
-            background: linear-gradient(45deg, #FFB6C1, #FFA07A);
-        }
-
-        .true-false-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .true-false-buttons .choice-btn {
-            min-width: 150px;
-            font-size: 1.3em;
-        }
-
-        .feedback {
-            background: #E6F3FF;
-            border-left: 5px solid #4ECDC4;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 10px;
-            font-size: 1.1em;
-            text-align: left;
-        }
-
-        .points-earned {
-            background: linear-gradient(45deg, #FFD700, #FFA500);
-            color: white;
-            padding: 15px;
             border-radius: 15px;
-            font-size: 1.2em;
-            font-weight: bold;
-            margin: 15px 0;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-        }
-
-        .next-btn {
-            background: linear-gradient(45deg, #4ECDC4, #44A08D);
-            color: white;
-            border: none;
-            border-radius: 25px;
-            padding: 15px 30px;
-            font-size: 1.2em;
-            font-weight: bold;
+            padding: 20px;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin: 20px 10px;
+            text-align: center;
         }
 
-        .next-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        .phase-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .phase-card h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .phase-card p {
+            font-size: 0.9em;
+            color: #666;
         }
 
         .start-btn {
@@ -254,21 +165,21 @@
             color: white;
             border: none;
             border-radius: 30px;
-            padding: 20px 40px;
-            font-size: 1.5em;
+            padding: 15px 30px;
+            font-size: 1.3em;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin: 30px 0;
+            margin: 20px 10px;
         }
 
         .start-btn:hover {
-            transform: scale(1.1);
+            transform: scale(1.05);
             box-shadow: 0 8px 25px rgba(0,0,0,0.2);
         }
 
-        /* Jogo 2D Styles */
-        .game-2d-container {
+        /* Jogo 3D Styles */
+        .game-3d-container {
             background: linear-gradient(to bottom, #87CEEB, #98FB98);
             border: 3px solid #4ECDC4;
             border-radius: 15px;
@@ -277,147 +188,341 @@
             position: relative;
             overflow: hidden;
             margin: 20px 0;
+            perspective: 1000px;
         }
 
-        .lion-2d {
+        .lion-3d {
             position: absolute;
             bottom: 50px;
-            left: 50px;
+            left: 50%;
+            transform: translateX(-50%) rotateY(0deg);
             font-size: 3em;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             z-index: 10;
         }
 
-        .obstacle {
+        .obstacle-3d {
             position: absolute;
             bottom: 50px;
             font-size: 2.5em;
-            animation: moveLeft 3s linear infinite;
+            animation: move3D 4s linear infinite;
         }
 
-        .collectible {
+        .collectible-3d {
             position: absolute;
             bottom: 100px;
             font-size: 2em;
-            animation: moveLeft 4s linear infinite;
+            animation: move3D 5s linear infinite;
         }
 
-        @keyframes moveLeft {
-            from { right: -100px; }
-            to { right: 100%; }
+        @keyframes move3D {
+            from { 
+                transform: translateZ(0px) translateX(0px);
+                right: -100px;
+            }
+            to { 
+                transform: translateZ(200px) translateX(0px);
+                right: 100%;
+            }
         }
 
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 20px 0;
-            flex-wrap: wrap;
+        .touch-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            gap: 10px;
+            max-width: 300px;
+            margin: 20px auto;
+            height: 200px;
         }
 
-        .control-btn {
+        .touch-btn {
             background: linear-gradient(45deg, #3498DB, #2980B9);
             color: white;
             border: none;
             border-radius: 15px;
-            padding: 15px 25px;
-            font-size: 1.1em;
-            font-weight: bold;
+            font-size: 1.5em;
             cursor: pointer;
             transition: all 0.2s ease;
-            min-width: 100px;
-        }
-
-        .control-btn:hover {
-            transform: scale(1.05);
-        }
-
-        .control-btn:active {
-            transform: scale(0.95);
-        }
-
-        .game-2d-info {
             display: flex;
-            justify-content: space-between;
-            margin: 15px 0;
-            font-weight: bold;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
         }
 
-        .final-screen {
-            text-align: center;
+        .touch-btn:active {
+            transform: scale(0.95);
+            background: linear-gradient(45deg, #2980B9, #1F618D);
         }
 
-        .medal {
-            font-size: 3em;
+        .touch-btn.jump {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        .touch-btn.left {
+            grid-column: 1;
+            grid-row: 2;
+        }
+
+        .touch-btn.right {
+            grid-column: 3;
+            grid-row: 2;
+        }
+
+        .touch-btn.duck {
+            grid-column: 2;
+            grid-row: 3;
+        }
+
+        .touch-btn.action {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        .touch-btn.pause {
+            grid-column: 3;
+            grid-row: 1;
+        }
+
+        /* Admin Styles */
+        .admin-login {
+            background: #F0F8FF;
+            border: 3px solid #E74C3C;
+            border-radius: 15px;
+            padding: 25px;
             margin: 20px 0;
         }
 
-        .leaderboard {
-            background: #F0F8FF;
-            border: 3px solid #4ECDC4;
+        .admin-panel {
+            background: #F8F9FA;
+            border: 2px solid #6C757D;
             border-radius: 15px;
             padding: 20px;
             margin: 20px 0;
             text-align: left;
         }
 
-        .leaderboard h3 {
-            text-align: center;
-            margin-bottom: 15px;
-            color: #4ECDC4;
+        .admin-section {
+            background: white;
+            border: 1px solid #DEE2E6;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
         }
 
-        .leaderboard-entry {
+        .form-group {
+            margin: 15px 0;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #CED4DA;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .btn-admin {
+            background: linear-gradient(45deg, #28A745, #20C997);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, #DC3545, #C82333);
+        }
+
+        .partner-card {
+            background: white;
+            border: 2px solid #DEE2E6;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
             display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #E0E0E0;
+            align-items: center;
+            gap: 15px;
         }
 
-        @media (max-width: 600px) {
+        .partner-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .about-content {
+            background: #F0F8FF;
+            border: 3px solid #4ECDC4;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .game-card {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .quiz-game {
+            background: #F0F8FF;
+            border: 3px solid #4ECDC4;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .memory-game {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+
+        .memory-card {
+            aspect-ratio: 1;
+            background: linear-gradient(45deg, #FF9A9E, #FECFEF);
+            border: none;
+            border-radius: 10px;
+            font-size: 2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .memory-card.flipped {
+            background: linear-gradient(45deg, #4ECDC4, #44A08D);
+        }
+
+        .scenario-game {
+            background: #F0F8FF;
+            border: 3px solid #4ECDC4;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .scenario-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .scenario-btn {
+            background: linear-gradient(45deg, #FF9A9E, #FECFEF);
+            border: none;
+            border-radius: 15px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .scenario-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
             .game-container {
-                padding: 20px;
+                padding: 15px;
+                width: 98%;
             }
             
             .header h1 {
-                font-size: 2em;
+                font-size: 1.8em;
             }
             
             .lion-character {
-                font-size: 3em;
+                font-size: 2.5em;
             }
 
-            .game-info {
-                flex-direction: column;
-            }
-
-            .name-input input {
-                width: 100%;
-            }
-
-            .true-false-buttons {
+            .navigation {
                 flex-direction: column;
                 align-items: center;
             }
 
-            .game-2d-container {
-                height: 300px;
+            .nav-btn {
+                width: 200px;
             }
 
-            .controls {
-                flex-direction: column;
-                align-items: center;
+            .phase-selector {
+                grid-template-columns: 1fr;
+            }
+
+            .touch-controls {
+                max-width: 250px;
+                height: 150px;
+            }
+
+            .touch-btn {
+                font-size: 1.2em;
+            }
+
+            .games-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
     <div class="game-container">
-        <!-- Tela de Nome -->
-        <div id="name-screen" class="game-screen active">
+        <!-- Navegação Principal -->
+        <div class="navigation">
+            <button class="nav-btn active" onclick="showScreen('home')">🏠 Início</button>
+            <button class="nav-btn" onclick="showScreen('phases')">🎮 Fases</button>
+            <button class="nav-btn" onclick="showScreen('games')">🎯 Jogos</button>
+            <button class="nav-btn" onclick="showScreen('about')">📚 Sobre PROERD</button>
+            <button class="nav-btn" onclick="showScreen('partners')">🤝 Parceiros</button>
+            <button class="nav-btn" onclick="showScreen('admin-login')">👨‍💼 Admin</button>
+        </div>
+
+        <!-- Tela Inicial -->
+        <div id="home" class="game-screen active">
             <div class="header">
-                <h1>🦁 JOGO DO PROERD 🦁</h1>
+                <h1>🦁 PROERD - Sistema Educacional 🦁</h1>
                 <p>Programa Educacional de Resistência às Drogas e à Violência</p>
+            </div>
+            
+            <div class="developer-info">
+                <p><strong>Desenvolvido por:</strong> Soldado Pappette</p>
+                <p><strong>6º Batalhão de Polícia Militar de Mato Grosso do Sul</strong></p>
+                <p>Sistema Interativo de Educação e Prevenção</p>
             </div>
             
             <div class="lion-character">🦁</div>
@@ -432,113 +537,338 @@
             </div>
         </div>
 
-        <!-- Tela Inicial -->
-        <div id="start-screen" class="game-screen">
+        <!-- Seleção de Fases -->
+        <div id="phases" class="game-screen">
             <div class="header">
-                <h1>🦁 JOGO DO PROERD - 6 FASES 🦁</h1>
-                <p>Programa Educacional de Resistência às Drogas e à Violência</p>
+                <h1>🎯 Escolha sua Fase</h1>
+                <p>Selecione qual desafio você quer enfrentar!</p>
             </div>
             
-            <div class="player-info" id="welcome-message"></div>
-            
-            <div class="lion-character">🦁</div>
-            
-            <div class="scenario">
-                <h2>6 Fases Épicas te Esperam!</h2>
-                <p><strong>🎯 Fase 1:</strong> 10 questões Verdadeiro/Falso (45s cada)</p>
-                <p><strong>🎯 Fase 2:</strong> 15 questões com 3 opções (45s cada)</p>
-                <p><strong>🎯 Fase 3:</strong> 15 questões com 4 opções (45s cada)</p>
-                <p><strong>🎯 Fase 4:</strong> 15 questões com 5 opções (45s cada)</p>
-                <p><strong>🎯 Fase 5:</strong> 15 questões desafio final (45s cada)</p>
-                <p><strong>🎮 Fase 6:</strong> Jogo 2D - Leão Corajoso em Ação!</p>
-                <br>
-                <p><strong>Sistema de Pontuação:</strong></p>
-                <ul style="text-align: left; margin: 15px 0;">
-                    <li>🏆 Resposta correta: até 1000 pontos</li>
-                    <li>⏱️ Quanto mais rápido, mais pontos!</li>
-                    <li>📉 Perde 600 pontos por segundo</li>
-                    <li>❌ Resposta errada: 0 pontos</li>
-                </ul>
+            <div class="phase-selector">
+                <div class="phase-card" onclick="startPhase(1)">
+                    <h3>🎯 Fase 1</h3>
+                    <p>Verdadeiro ou Falso</p>
+                    <p>10 questões - 45s cada</p>
+                </div>
+                <div class="phase-card" onclick="startPhase(2)">
+                    <h3>🎯 Fase 2</h3>
+                    <p>3 Opções</p>
+                    <p>15 questões - 45s cada</p>
+                </div>
+                <div class="phase-card" onclick="startPhase(3)">
+                    <h3>🎯 Fase 3</h3>
+                    <p>4 Opções</p>
+                    <p>15 questões - 45s cada</p>
+                </div>
+                <div class="phase-card" onclick="startPhase(4)">
+                    <h3>🎯 Fase 4</h3>
+                    <p>5 Opções</p>
+                    <p>15 questões - 45s cada</p>
+                </div>
+                <div class="phase-card" onclick="startPhase(5)">
+                    <h3>🎯 Fase 5</h3>
+                    <p>Desafio Final</p>
+                    <p>15 questões - 45s cada</p>
+                </div>
+                <div class="phase-card" onclick="startGame2D()">
+                    <h3>🎮 Jogo 2D</h3>
+                    <p>Leão Corajoso</p>
+                    <p>Ação e Aventura</p>
+                </div>
+                <div class="phase-card" onclick="startGame3D()">
+                    <h3>🌟 Jogo 3D</h3>
+                    <p>Leão PROERD 3D</p>
+                    <p>Obstáculos em 3D</p>
+                </div>
             </div>
-            
-            <button class="start-btn" onclick="startGame()">🚀 Iniciar Fase 1</button>
         </div>
 
-        <!-- Telas do Jogo -->
-        <div id="game-screen" class="game-screen">
-            <div class="phase-info" id="phase-info"></div>
+        <!-- Jogos Extras -->
+        <div id="games" class="game-screen">
+            <div class="header">
+                <h1>🎮 Jogos Educativos PROERD</h1>
+                <p>Aprenda brincando com diversos jogos!</p>
+            </div>
+            
+            <div class="games-grid">
+                <div class="game-card" onclick="startMemoryGame()">
+                    <h3>🧠 Jogo da Memória</h3>
+                    <p>Encontre os pares dos símbolos do PROERD</p>
+                </div>
+                <div class="game-card" onclick="startQuizGame()">
+                    <h3>❓ Quiz Rápido</h3>
+                    <p>Perguntas rápidas sobre prevenção</p>
+                </div>
+                <div class="game-card" onclick="startScenarioGame()">
+                    <h3>🎭 Situações Reais</h3>
+                    <p>Como você reagiria em situações de risco?</p>
+                </div>
+                <div class="game-card" onclick="startWordGame()">
+                    <h3>📝 Caça-Palavras</h3>
+                    <p>Encontre palavras relacionadas ao PROERD</p>
+                </div>
+                <div class="game-card" onclick="startPuzzleGame()">
+                    <h3>🧩 Quebra-Cabeça</h3>
+                    <p>Monte a imagem do Leão PROERD</p>
+                </div>
+                <div class="game-card" onclick="startRhymeGame()">
+                    <h3>🎵 Rimas do PROERD</h3>
+                    <p>Complete as rimas educativas</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sobre o PROERD -->
+        <div id="about" class="game-screen">
+            <div class="header">
+                <h1>📚 Sobre o PROERD</h1>
+                <p>Conheça nosso programa educacional</p>
+            </div>
+            
+            <div class="about-content" id="about-content">
+                <h2>🦁 Programa Educacional de Resistência às Drogas e à Violência</h2>
+                
+                <h3>📖 O que é o PROERD?</h3>
+                <p>O PROERD é um programa educacional desenvolvido pela Polícia Militar que visa prevenir o uso de drogas e a violência entre crianças e adolescentes. Através de atividades interativas, jogos e discussões, o programa ensina habilidades de resistência e tomada de decisões saudáveis.</p>
+                
+                <h3>🎯 Objetivos</h3>
+                <ul>
+                    <li>Prevenir o uso de drogas lícitas e ilícitas</li>
+                    <li>Combater a violência entre jovens</li>
+                    <li>Desenvolver habilidades de resistência à pressão</li>
+                    <li>Promover a autoestima e autoconfiança</li>
+                    <li>Fortalecer vínculos familiares e comunitários</li>
+                </ul>
+                
+                <h3>🌟 Metodologia</h3>
+                <p>O programa utiliza metodologia interativa, com atividades lúdicas, discussões em grupo, jogos educativos e situações práticas que preparam os jovens para enfrentar situações de risco no dia a dia.</p>
+                
+                <h3>👮‍♂️ Instrutores</h3>
+                <p>Os instrutores do PROERD são policiais militares especialmente treinados e capacitados para trabalhar com crianças e adolescentes, utilizando técnicas pedagógicas modernas e eficazes.</p>
+                
+                <h3>🏆 Resultados</h3>
+                <p>O PROERD tem demonstrado resultados positivos na prevenção ao uso de drogas e redução da violência, contribuindo para a formação de cidadãos mais conscientes e preparados para fazer escolhas saudáveis.</p>
+            </div>
+        </div>
+
+        <!-- Parceiros -->
+        <div id="partners" class="game-screen">
+            <div class="header">
+                <h1>🤝 Nossos Parceiros</h1>
+                <p>Juntos na missão de educar e proteger</p>
+            </div>
+            
+            <div id="partners-list">
+                <div class="partner-card">
+                    <div class="partner-logo">🏫</div>
+                    <div>
+                        <h3>Secretaria de Educação</h3>
+                        <p>Parceria fundamental para levar o PROERD às escolas estaduais e municipais.</p>
+                    </div>
+                </div>
+                <div class="partner-card">
+                    <div class="partner-logo">🏥</div>
+                    <div>
+                        <h3>Secretaria de Saúde</h3>
+                        <p>Apoio na prevenção e tratamento de questões relacionadas ao uso de substâncias.</p>
+                    </div>
+                </div>
+                <div class="partner-card">
+                    <div class="partner-logo">👨‍👩‍👧‍👦</div>
+                    <div>
+                        <h3>Conselho Tutelar</h3>
+                        <p>Proteção integral de crianças e adolescentes em situação de risco.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Admin -->
+        <div id="admin-login" class="game-screen">
+            <div class="header">
+                <h1>👨‍💼 Área Administrativa</h1>
+                <p>Acesso restrito para administradores</p>
+            </div>
+            
+            <div class="admin-login">
+                <h3>🔐 Login de Administrador</h3>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="admin-email" placeholder="proerd6bpmms@gmail.com">
+                </div>
+                <div class="form-group">
+                    <label>Senha:</label>
+                    <input type="password" id="admin-password" placeholder="Digite sua senha">
+                </div>
+                <button class="btn-admin" onclick="adminLogin()">🔑 Entrar</button>
+            </div>
+        </div>
+
+        <!-- Painel Admin -->
+        <div id="admin-panel" class="game-screen">
+            <div class="header">
+                <h1>⚙️ Painel Administrativo</h1>
+                <p>Gerenciamento do Sistema PROERD</p>
+            </div>
+            
+            <div class="admin-panel">
+                <div class="admin-section">
+                    <h3>📝 Editar Sobre o PROERD</h3>
+                    <div class="form-group">
+                        <label>Conteúdo:</label>
+                        <textarea id="about-editor" placeholder="Digite o conteúdo sobre o PROERD..."></textarea>
+                    </div>
+                    <button class="btn-admin" onclick="updateAbout()">💾 Salvar Alterações</button>
+                </div>
+                
+                <div class="admin-section">
+                    <h3>👥 Gerenciar Administradores</h3>
+                    <div class="form-group">
+                        <label>Novo Email:</label>
+                        <input type="email" id="new-admin-email" placeholder="email@exemplo.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Nova Senha:</label>
+                        <input type="password" id="new-admin-password" placeholder="Digite a senha">
+                    </div>
+                    <button class="btn-admin" onclick="addAdmin()">➕ Adicionar Admin</button>
+                    
+                    <div id="admin-list"></div>
+                </div>
+                
+                <div class="admin-section">
+                    <h3>🤝 Gerenciar Parceiros</h3>
+                    <div class="form-group">
+                        <label>Nome do Parceiro:</label>
+                        <input type="text" id="partner-name" placeholder="Nome da organização">
+                    </div>
+                    <div class="form-group">
+                        <label>Descrição:</label>
+                        <textarea id="partner-description" placeholder="Descrição da parceria..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Logo (URL):</label>
+                        <input type="url" id="partner-logo" placeholder="https://exemplo.com/logo.png">
+                    </div>
+                    <button class="btn-admin" onclick="addPartner()">➕ Adicionar Parceiro</button>
+                    
+                    <div id="partners-admin-list"></div>
+                </div>
+                
+                <div class="admin-section">
+                    <h3>🖼️ Logos do Sistema</h3>
+                    <div class="form-group">
+                        <label>Logo PROERD (URL):</label>
+                        <input type="url" id="proerd-logo" placeholder="https://exemplo.com/proerd-logo.png">
+                    </div>
+                    <div class="form-group">
+                        <label>Logo Polícia Militar (URL):</label>
+                        <input type="url" id="pm-logo" placeholder="https://exemplo.com/pm-logo.png">
+                    </div>
+                    <button class="btn-admin" onclick="updateLogos()">🖼️ Atualizar Logos</button>
+                </div>
+                
+                <button class="btn-admin btn-danger" onclick="adminLogout()">🚪 Sair</button>
+            </div>
+        </div>
+
+        <!-- Jogo 3D -->
+        <div id="game-3d-screen" class="game-screen">
+            <div class="header">
+                <h1>🌟 Leão PROERD 3D</h1>
+                <p>Aventura tridimensional de prevenção!</p>
+            </div>
             
             <div class="game-info">
-                <div class="player-info" id="player-display"></div>
-                <div class="timer" id="timer">45s</div>
+                <div>Pontos: <span id="game-3d-score">0</span></div>
+                <div>Tempo: <span id="game-3d-timer">90</span>s</div>
+                <div>Vidas: <span id="game-3d-lives">3</span></div>
             </div>
             
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress-fill"></div>
+            <div class="game-3d-container" id="game-3d-container">
+                <div class="lion-3d" id="lion-3d">🦁</div>
             </div>
             
-            <div class="lion-character">🦁</div>
-            
-            <div class="scenario" id="scenario-text"></div>
-            
-            <div class="choices" id="choices-container"></div>
-            
-            <div class="feedback" id="feedback" style="display: none;"></div>
-            <div class="points-earned" id="points-earned" style="display: none;"></div>
-            
-            <button class="next-btn" id="next-btn" onclick="nextQuestion()" style="display: none;">Próxima Questão →</button>
-        </div>
-
-        <!-- Jogo 2D -->
-        <div id="game-2d-screen" class="game-screen">
-            <div class="header">
-                <h1>🎮 FASE 6 - LEÃO CORAJOSO EM AÇÃO! 🎮</h1>
-            </div>
-            
-            <div class="game-2d-info">
-                <div>Pontos: <span id="game-2d-score">0</span></div>
-                <div>Tempo: <span id="game-2d-timer">60</span>s</div>
-                <div>Vidas: <span id="game-2d-lives">3</span></div>
-            </div>
-            
-            <div class="game-2d-container" id="game-2d-container">
-                <div class="lion-2d" id="lion-2d">🦁</div>
-            </div>
-            
-            <div class="controls">
-                <button class="control-btn" onmousedown="startMove('left')" onmouseup="stopMove()" ontouchstart="startMove('left')" ontouchend="stopMove()">⬅️ Esquerda</button>
-                <button class="control-btn" onclick="jump()">⬆️ Pular</button>
-                <button class="control-btn" onmousedown="startMove('right')" onmouseup="stopMove()" ontouchstart="startMove('right')" ontouchend="stopMove()">➡️ Direita</button>
-                <button class="control-btn" onclick="duck()">⬇️ Abaixar</button>
+            <div class="touch-controls">
+                <button class="touch-btn action" ontouchstart="specialAction()" ontouchend="">🛡️</button>
+                <button class="touch-btn jump" ontouchstart="jump3D()" ontouchend="">⬆️</button>
+                <button class="touch-btn pause" ontouchstart="pauseGame3D()" ontouchend="">⏸️</button>
+                <button class="touch-btn left" ontouchstart="startMove3D('left')" ontouchend="stopMove3D()">⬅️</button>
+                <button class="touch-btn" style="visibility: hidden;"></button>
+                <button class="touch-btn right" ontouchstart="startMove3D('right')" ontouchend="stopMove3D()">➡️</button>
+                <button class="touch-btn" style="visibility: hidden;"></button>
+                <button class="touch-btn duck" ontouchstart="duck3D()" ontouchend="">⬇️</button>
+                <button class="touch-btn" style="visibility: hidden;"></button>
             </div>
             
             <div class="scenario">
-                <p><strong>Missão:</strong> Ajude o Leão a coletar medalhas do PROERD (🏅) e evitar obstáculos perigosos!</p>
-                <p>🏅 Medalha = +100 pontos | ☠️ Obstáculo = -1 vida</p>
+                <p><strong>Missão 3D:</strong> Navegue pelo mundo 3D coletando medalhas PROERD (🏅) e evitando obstáculos!</p>
+                <p>🏅 Medalha = +150 pontos | ☠️ Obstáculo = -1 vida | 🛡️ Escudo especial</p>
             </div>
             
-            <button class="next-btn" id="finish-2d-btn" onclick="finish2DGame()" style="display: none;">Finalizar Jogo</button>
+            <button class="start-btn" onclick="showScreen('phases')">🔙 Voltar às Fases</button>
         </div>
 
-        <!-- Tela Final -->
-        <div id="final-screen" class="game-screen final-screen">
+        <!-- Jogo da Memória -->
+        <div id="memory-game-screen" class="game-screen">
             <div class="header">
-                <h1>🎉 Todas as Fases Concluídas! 🎉</h1>
+                <h1>🧠 Jogo da Memória PROERD</h1>
+                <p>Encontre os pares dos símbolos!</p>
             </div>
             
-            <div class="medal" id="final-medal"></div>
+            <div class="game-info">
+                <div>Pontos: <span id="memory-score">0</span></div>
+                <div>Tentativas: <span id="memory-attempts">0</span></div>
+                <div>Pares: <span id="memory-pairs">0</span>/8</div>
+            </div>
             
-            <div class="player-info" id="final-score"></div>
+            <div class="memory-game" id="memory-board"></div>
             
-            <div class="scenario" id="final-message"></div>
+            <button class="start-btn" onclick="resetMemoryGame()">🔄 Novo Jogo</button>
+            <button class="start-btn" onclick="showScreen('games')">🔙 Voltar aos Jogos</button>
+        </div>
+
+        <!-- Quiz Rápido -->
+        <div id="quiz-game-screen" class="game-screen">
+            <div class="header">
+                <h1>❓ Quiz Rápido PROERD</h1>
+                <p>Teste seus conhecimentos!</p>
+            </div>
             
-            <div class="leaderboard" id="leaderboard"></div>
+            <div class="quiz-game" id="quiz-container">
+                <div id="quiz-question"></div>
+                <div id="quiz-options"></div>
+                <div id="quiz-feedback" style="display: none;"></div>
+            </div>
             
-            <button class="next-btn" onclick="restartGame()">🔄 Jogar Novamente</button>
+            <div class="game-info">
+                <div>Questão: <span id="quiz-current">1</span>/10</div>
+                <div>Pontos: <span id="quiz-score">0</span></div>
+                <div>Acertos: <span id="quiz-correct">0</span></div>
+            </div>
+            
+            <button class="start-btn" onclick="showScreen('games')">🔙 Voltar aos Jogos</button>
+        </div>
+
+        <!-- Situações Reais -->
+        <div id="scenario-game-screen" class="game-screen">
+            <div class="header">
+                <h1>🎭 Situações Reais</h1>
+                <p>Como você reagiria?</p>
+            </div>
+            
+            <div class="scenario-game" id="scenario-container">
+                <div id="scenario-situation"></div>
+                <div class="scenario-options" id="scenario-options"></div>
+                <div id="scenario-feedback" style="display: none;"></div>
+            </div>
+            
+            <button class="start-btn" onclick="showScreen('games')">🔙 Voltar aos Jogos</button>
         </div>
     </div>
 
     <script>
+        // Variáveis globais
         let currentPhase = 1;
         let currentQuestion = 0;
         let totalScore = 0;
@@ -546,742 +876,75 @@
         let timeLeft = 45;
         let timerInterval;
         let startTime;
-        let questionsPerPhase = [10, 15, 15, 15, 15];
+        let isLoggedIn = false;
         
-        // Jogo 2D variables
-        let game2DScore = 0;
-        let game2DTimer = 60;
-        let game2DLives = 3;
-        let game2DInterval;
-        let obstacleInterval;
-        let collectibleInterval;
-        let lionPosition = { x: 50, y: 50, jumping: false, ducking: false };
-        let moveInterval;
-        let moveDirection = '';
+        // Jogo 3D variables
+        let game3DScore = 0;
+        let game3DTimer = 90;
+        let game3DLives = 3;
+        let game3DInterval;
+        let obstacle3DInterval;
+        let collectible3DInterval;
+        let lion3DPosition = { x: 0, y: 50, z: 0, jumping: false, ducking: false };
+        let move3DInterval;
+        let move3DDirection = '';
+        let game3DPaused = false;
 
-        let gameData = {
-            phase1: [ // Verdadeiro ou Falso
-                {
-                    question: "O PROERD ensina que devemos sempre dizer NÃO às drogas.",
-                    correct: true,
-                    feedback: {
-                        correct: "✅ Verdadeiro! O PROERD nos ensina a resistir às drogas e fazer escolhas saudáveis.",
-                        incorrect: "❌ Falso! O PROERD sempre ensina a dizer NÃO às drogas e à violência."
-                    }
-                },
-                {
-                    question: "É normal experimentar drogas 'só uma vez' para saber como é.",
-                    correct: false,
-                    feedback: {
-                        correct: "✅ Falso! Nunca é seguro experimentar drogas, nem mesmo uma vez.",
-                        incorrect: "❌ Verdadeiro! Experimentar drogas, mesmo uma vez, pode ser muito perigoso."
-                    }
-                },
-                {
-                    question: "Álcool é uma droga e pode causar dependência.",
-                    correct: true,
-                    feedback: {
-                        correct: "✅ Verdadeiro! O álcool é uma droga legal, mas ainda assim perigosa e viciante.",
-                        incorrect: "❌ Falso! O álcool é sim uma droga e pode causar sérios problemas de saúde."
-                    }
-                },
-                {
-                    question: "Bullying é uma forma de violência que deve ser combatida.",
-                    correct: true,
-                    feedback: {
-                        correct: "✅ Verdadeiro! O bullying é violência e todos devemos ajudar a combatê-lo.",
-                        incorrect: "❌ Falso! O bullying é sim uma forma de violência que causa muito sofrimento."
-                    }
-                },
-                {
-                    question: "Medicamentos sem receita médica são sempre seguros.",
-                    correct: false,
-                    feedback: {
-                        correct: "✅ Falso! Medicamentos sem receita podem ser muito perigosos.",
-                        incorrect: "❌ Verdadeiro! Medicamentos sempre devem ser prescritos por médicos."
-                    }
-                },
-                {
-                    question: "Devemos sempre contar para adultos de confiança sobre situações suspeitas.",
-                    correct: true,
-                    feedback: {
-                        correct: "✅ Verdadeiro! Adultos de confiança podem nos ajudar em situações perigosas.",
-                        incorrect: "❌ Falso! É muito importante conversar com adultos sobre situações suspeitas."
-                    }
-                },
-                {
-                    question: "Cigarro eletrônico não faz mal porque não tem fumaça.",
-                    correct: false,
-                    feedback: {
-                        correct: "✅ Falso! Cigarros eletrônicos também são prejudiciais à saúde.",
-                        incorrect: "❌ Verdadeiro! Cigarros eletrônicos contêm substâncias tóxicas e viciantes."
-                    }
-                },
-                {
-                    question: "É possível se divertir em festas sem usar álcool ou drogas.",
-                    correct: true,
-                    feedback: {
-                        correct: "✅ Verdadeiro! A diversão verdadeira não precisa de substâncias prejudiciais.",
-                        incorrect: "❌ Falso! Podemos nos divertir muito sem álcool ou drogas."
-                    }
-                },
-                {
-                    question: "Maconha é natural, então não faz mal.",
-                    correct: false,
-                    feedback: {
-                        correct: "✅ Falso! Ser natural não significa ser seguro. Maconha causa muitos problemas.",
-                        incorrect: "❌ Verdadeiro! Maconha, mesmo sendo natural, é prejudicial e ilegal."
-                    }
-                },
-                {
-                    question: "Devemos ajudar colegas que estão sendo intimidados ou agredidos.",
-                    correct: true,
-                    feedback: {
-                        correct: "✅ Verdadeiro! Ajudar quem precisa é um ato de coragem e solidariedade.",
-                        incorrect: "❌ Falso! Sempre devemos ajudar quem está sendo maltratado."
-                    }
-                }
+        // Memory Game variables
+        let memoryCards = [];
+        let flippedCards = [];
+        let memoryScore = 0;
+        let memoryAttempts = 0;
+        let memoryPairs = 0;
+
+        // Quiz variables
+        let quizQuestions = [];
+        let currentQuizQuestion = 0;
+        let quizScore = 0;
+        let quizCorrect = 0;
+
+        // Dados do sistema
+        let systemData = {
+            admins: [
+                { email: 'proerd6bpmms@gmail.com', password: '6bpm@102010' }
             ],
-            phase2: [ // 3 opções
-                {
-                    question: "Qual é a melhor resposta quando alguém oferece drogas?",
-                    choices: ["Aceitar para não parecer diferente", "Dizer NÃO com firmeza", "Fingir que aceita"],
-                    correct: 1,
-                    feedback: {
-                        correct: "🌟 Perfeito! Dizer NÃO com firmeza é sempre a melhor escolha.",
-                        incorrect: "❌ A resposta correta é sempre dizer NÃO com firmeza às drogas."
-                    }
-                },
-                {
-                    question: "O que fazer se presenciar bullying na escola?",
-                    choices: ["Ignorar a situação", "Defender a vítima e buscar ajuda", "Filmar para redes sociais"],
-                    correct: 1,
-                    feedback: {
-                        correct: "👏 Excelente! Defender e buscar ajuda é a atitude correta.",
-                        incorrect: "❌ Devemos sempre defender quem está sendo intimidado e buscar ajuda."
-                    }
-                },
-                {
-                    question: "Qual o principal objetivo do PROERD?",
-                    choices: ["Ensinar sobre drogas", "Prevenir uso de drogas e violência", "Punir usuários"],
-                    correct: 1,
-                    feedback: {
-                        correct: "🎯 Correto! O PROERD foca na prevenção e educação.",
-                        incorrect: "❌ O PROERD tem como objetivo prevenir o uso de drogas e a violência."
-                    }
-                },
-                {
-                    question: "Como lidar com pressão dos amigos para fazer algo errado?",
-                    choices: ["Ceder para manter a amizade", "Manter suas convicções e dizer NÃO", "Fazer escondido"],
-                    correct: 1,
-                    feedback: {
-                        correct: "💪 Muito bem! Ter convicções próprias é sinal de maturidade.",
-                        incorrect: "❌ Verdadeiros amigos respeitam nossas decisões corretas."
-                    }
-                },
-                {
-                    question: "O que caracteriza uma droga?",
-                    choices: ["Apenas substâncias ilegais", "Qualquer substância que altera o funcionamento do corpo", "Apenas remédios"],
-                    correct: 1,
-                    feedback: {
-                        correct: "🧠 Correto! Drogas são substâncias que alteram o funcionamento normal do organismo.",
-                        incorrect: "❌ Drogas são qualquer substância que altera o funcionamento do corpo."
-                    }
-                },
-                {
-                    question: "Qual a importância da família na prevenção às drogas?",
-                    choices: ["Não tem importância", "É fundamental para orientação e apoio", "Só atrapalha"],
-                    correct: 1,
-                    feedback: {
-                        correct: "👨‍👩‍👧‍👦 Perfeito! A família é nossa base de apoio e orientação.",
-                        incorrect: "❌ A família tem papel fundamental na prevenção e apoio."
-                    }
-                },
-                {
-                    question: "O que fazer se encontrar drogas em casa?",
-                    choices: ["Experimentar por curiosidade", "Conversar imediatamente com os pais", "Ignorar a situação"],
-                    correct: 1,
-                    feedback: {
-                        correct: "🏠 Excelente! Comunicação com os pais é essencial.",
-                        incorrect: "❌ Sempre devemos conversar com os pais sobre situações suspeitas."
-                    }
-                },
-                {
-                    question: "Qual o efeito das drogas no cérebro adolescente?",
-                    choices: ["Não causa efeitos", "Prejudica o desenvolvimento", "Melhora o desempenho"],
-                    correct: 1,
-                    feedback: {
-                        correct: "🧠 Correto! O cérebro adolescente é mais vulnerável aos efeitos das drogas.",
-                        incorrect: "❌ Drogas prejudicam gravemente o desenvolvimento do cérebro jovem."
-                    }
-                },
-                {
-                    question: "Como identificar um verdadeiro amigo?",
-                    choices: ["Oferece drogas para 'ajudar'", "Respeita suas decisões e te apoia", "Te pressiona a fazer coisas erradas"],
-                    correct: 1,
-                    feedback: {
-                        correct: "🤝 Perfeito! Verdadeiros amigos respeitam e apoiam nossas boas decisões.",
-                        incorrect: "❌ Amigos verdadeiros sempre respeitam nossas escolhas corretas."
-                    }
-                },
-                {
-                    question: "Qual a melhor forma de lidar com problemas e estresse?",
-                    choices: ["Usar substâncias para esquecer", "Buscar ajuda e atividades saudáveis", "Guardar tudo para si"],
-                    correct: 1,
-                    feedback: {
-                        correct: "🌱 Excelente! Atividades saudáveis e apoio são as melhores soluções.",
-                        incorrect: "❌ Problemas devem ser enfrentados com ajuda e atividades saudáveis."
-                    }
-                },
-                {
-                    question: "O que fazer se alguém próximo está usando drogas?",
-                    choices: ["Usar junto para apoiar", "Buscar ajuda de adultos e profissionais", "Ignorar a situação"],
-                    correct: 1,
-                    feedback: {
-                        correct: "🆘 Correto! Buscar ajuda profissional é a melhor forma de apoiar.",
-                        incorrect: "❌ Devemos buscar ajuda profissional para quem está usando drogas."
-                    }
-                },
-                {
-                    question: "Qual o papel da escola na prevenção às drogas?",
-                    choices: ["Não tem papel importante", "Educar e orientar os estudantes", "Apenas punir"],
-                    correct: 1,
-                    feedback: {
-                        correct: "🏫 Perfeito! A escola tem papel educativo fundamental.",
-                        incorrect: "❌ A escola é essencial na educação e prevenção sobre drogas."
-                    }
-                },
-                {
-                    question: "Como desenvolver autoestima para resistir às pressões?",
-                    choices: ["Usando drogas para se sentir melhor", "Praticando atividades que gosta e se conhecendo", "Isolando-se dos outros"],
-                    correct: 1,
-                    feedback: {
-                        correct: "💪 Excelente! Autoconhecimento e atividades prazerosas fortalecem a autoestima.",
-                        incorrect: "❌ Autoestima se desenvolve com autoconhecimento e atividades positivas."
-                    }
-                },
-                {
-                    question: "Qual a importância de ter objetivos na vida?",
-                    choices: ["Não é importante", "Ajuda a manter o foco e evitar más influências", "Só causa pressão"],
-                    correct: 1,
-                    feedback: {
-                        correct: "🎯 Correto! Objetivos nos mantêm focados em coisas positivas.",
-                        incorrect: "❌ Ter objetivos é fundamental para manter o foco em coisas boas."
-                    }
-                },
-                {
-                    question: "O que fazer em uma festa onde há uso de drogas?",
-                    choices: ["Participar para não parecer diferente", "Sair da festa ou evitar o local", "Fingir que não vê"],
-                    correct: 1,
-                    feedback: {
-                        correct: "🚪 Muito bem! Sair de ambientes perigosos é sempre a melhor escolha.",
-                        incorrect: "❌ Devemos sempre nos afastar de ambientes onde há uso de drogas."
-                    }
-                }
-            ],
-            phase3: [ // 4 opções
-                {
-                    question: "Quais são os principais fatores de risco para o uso de drogas?",
-                    choices: ["Apenas problemas familiares", "Só influência de amigos", "Problemas pessoais, pressão social, falta de informação", "Apenas curiosidade"],
-                    correct: 2,
-                    feedback: {
-                        correct: "🎯 Perfeito! Múltiplos fatores podem influenciar o risco de uso de drogas.",
-                        incorrect: "❌ Vários fatores combinados aumentam o risco de uso de drogas."
-                    }
-                },
-                {
-                    question: "Qual a diferença entre uso, abuso e dependência de drogas?",
-                    choices: ["Não há diferença", "Uso é ocasional, abuso é frequente, dependência é vício", "Todas são iguais", "Só dependência é problema"],
-                    correct: 1,
-                    feedback: {
-                        correct: "📚 Excelente! É importante entender essas diferenças para reconhecer problemas.",
-                        incorrect: "❌ Cada estágio representa um nível diferente de envolvimento com drogas."
-                    }
-                },
-                {
-                    question: "Como as drogas afetam o sistema nervoso?",
-                    choices: ["Não afetam", "Melhoram o funcionamento", "Alteram a comunicação entre neurônios", "Só afetam o corpo"],
-                    correct: 2,
-                    feedback: {
-                        correct: "🧠 Correto! Drogas interferem na comunicação neural normal.",
-                        incorrect: "❌ Drogas alteram gravemente o funcionamento do sistema nervoso."
-                    }
-                },
-                {
-                    question: "Qual o papel dos neurotransmissores no vício?",
-                    choices: ["Não têm papel", "Causam apenas prazer", "São alterados pelas drogas, criando dependência", "Só causam dor"],
-                    correct: 2,
-                    feedback: {
-                        correct: "🔬 Perfeito! Drogas alteram neurotransmissores, criando dependência química.",
-                        incorrect: "❌ Drogas alteram neurotransmissores, causando dependência."
-                    }
-                },
-                {
-                    question: "Quais são as consequências sociais do uso de drogas?",
-                    choices: ["Não há consequências sociais", "Apenas problemas de saúde", "Isolamento, problemas familiares, perda de oportunidades", "Só problemas legais"],
-                    correct: 2,
-                    feedback: {
-                        correct: "👥 Excelente! O uso de drogas afeta todas as áreas da vida social.",
-                        incorrect: "❌ Drogas causam sérios problemas em todas as relações sociais."
-                    }
-                },
-                {
-                    question: "Como identificar sinais de uso de drogas em colegas?",
-                    choices: ["É impossível identificar", "Apenas mudanças físicas", "Mudanças de comportamento, humor e desempenho", "Só pela aparência"],
-                    correct: 2,
-                    feedback: {
-                        correct: "👀 Correto! Múltiplos sinais podem indicar uso de drogas.",
-                        incorrect: "❌ Vários sinais comportamentais podem indicar uso de drogas."
-                    }
-                },
-                {
-                    question: "Qual a importância da prevenção primária?",
-                    choices: ["Não é importante", "Só serve para quem já usa", "Evita o primeiro contato com drogas", "É muito cara"],
-                    correct: 2,
-                    feedback: {
-                        correct: "🛡️ Perfeito! Prevenção primária é a forma mais eficaz de combater o problema.",
-                        incorrect: "❌ Prevenir o primeiro uso é a estratégia mais eficaz."
-                    }
-                },
-                {
-                    question: "Como as mídias sociais podem influenciar o uso de drogas?",
-                    choices: ["Não influenciam", "Só influenciam positivamente", "Podem glamourizar ou normalizar o uso", "Só mostram os perigos"],
-                    correct: 2,
-                    feedback: {
-                        correct: "📱 Correto! Mídias sociais podem influenciar negativamente sobre drogas.",
-                        incorrect: "❌ Mídias sociais podem glamourizar perigosamente o uso de drogas."
-                    }
-                },
-                {
-                    question: "Qual o papel da autoestima na prevenção às drogas?",
-                    choices: ["Não tem papel", "Só atrapalha", "Alta autoestima protege contra pressões", "Baixa autoestima é melhor"],
-                    correct: 2,
-                    feedback: {
-                        correct: "💪 Excelente! Autoestima forte é uma proteção natural contra drogas.",
-                        incorrect: "❌ Autoestima elevada é um fator de proteção importante."
-                    }
-                },
-                {
-                    question: "Como desenvolver habilidades de recusa?",
-                    choices: ["Não é possível", "Apenas dizendo não", "Praticando situações, tendo argumentos e alternativas", "Evitando todas as pessoas"],
-                    correct: 2,
-                    feedback: {
-                        correct: "🗣️ Perfeito! Habilidades de recusa se desenvolvem com prática e preparo.",
-                        incorrect: "❌ Habilidades de recusa precisam ser desenvolvidas e praticadas."
-                    }
-                },
-                {
-                    question: "Qual a relação entre drogas e criminalidade?",
-                    choices: ["Não há relação", "Drogas reduzem crimes", "Uso e tráfico estão ligados à violência", "Só usuários cometem crimes"],
-                    correct: 2,
-                    feedback: {
-                        correct: "⚖️ Correto! Drogas estão fortemente ligadas à criminalidade e violência.",
-                        incorrect: "❌ Existe forte ligação entre drogas, tráfico e criminalidade."
-                    }
-                },
-                {
-                    question: "Como as drogas afetam o desempenho escolar?",
-                    choices: ["Melhoram o desempenho", "Não afetam", "Prejudicam memória, concentração e motivação", "Só afetam notas"],
-                    correct: 2,
-                    feedback: {
-                        correct: "📚 Excelente! Drogas prejudicam gravemente o aprendizado.",
-                        incorrect: "❌ Drogas causam sérios prejuízos ao desempenho escolar."
-                    }
-                },
-                {
-                    question: "Qual a importância do tratamento para dependentes?",
-                    choices: ["Não é importante", "É impossível tratar", "É fundamental para recuperação e reinserção social", "Só serve para punir"],
-                    correct: 2,
-                    feedback: {
-                        correct: "🏥 Perfeito! Tratamento adequado pode salvar vidas e famílias.",
-                        incorrect: "❌ Tratamento é essencial para recuperação de dependentes."
-                    }
-                },
-                {
-                    question: "Como a comunidade pode ajudar na prevenção?",
-                    choices: ["Não pode ajudar", "Apenas punindo usuários", "Oferecendo atividades, apoio e informação", "Ignorando o problema"],
-                    correct: 2,
-                    feedback: {
-                        correct: "🏘️ Excelente! Comunidades unidas são mais eficazes na prevenção.",
-                        incorrect: "❌ A comunidade tem papel fundamental na prevenção às drogas."
-                    }
-                },
-                {
-                    question: "Qual o impacto das drogas na família?",
-                    choices: ["Não afeta a família", "Só afeta o usuário", "Causa sofrimento, conflitos e desestruturação familiar", "Fortalece a família"],
-                    correct: 2,
-                    feedback: {
-                        correct: "👨‍👩‍👧‍👦 Correto! Drogas afetam profundamente toda a estrutura familiar.",
-                        incorrect: "❌ O uso de drogas causa grande sofrimento a toda a família."
-                    }
-                }
-            ],
-            phase4: [ // 5 opções
-                {
-                    question: "Quais são os principais tipos de drogas e seus efeitos?",
-                    choices: ["Só existem drogas ilegais", "Depressoras, estimulantes e alucinógenas", "Apenas álcool e cigarro", "Só remédios", "Não há classificação"],
-                    correct: 1,
-                    feedback: {
-                        correct: "🔬 Perfeito! Esta é a classificação científica principal das drogas.",
-                        incorrect: "❌ Drogas são classificadas em depressoras, estimulantes e alucinógenas."
-                    }
-                },
-                {
-                    question: "Como funciona o processo de dependência química?",
-                    choices: ["É só falta de vontade", "Acontece imediatamente", "É um processo gradual que altera o cérebro", "Só afeta pessoas fracas", "Não existe dependência"],
-                    correct: 2,
-                    feedback: {
-                        correct: "🧠 Excelente! Dependência é um processo complexo que altera o funcionamento cerebral.",
-                        incorrect: "❌ Dependência é um processo gradual que modifica o cérebro."
-                    }
-                },
-                {
-                    question: "Qual o papel da genética na predisposição às drogas?",
-                    choices: ["Genética não influencia", "Determina completamente", "É um fator de risco, mas não destino", "Só afeta algumas drogas", "É o único fator"],
-                    correct: 2,
-                    feedback: {
-                        correct: "🧬 Correto! Genética é um fator de risco, mas não determina o destino.",
-                        incorrect: "❌ Genética influencia, mas não determina o uso de drogas."
-                    }
-                },
-                {
-                    question: "Como as drogas afetam diferentes sistemas do corpo?",
-                    choices: ["Só afetam o cérebro", "Não afetam o corpo", "Afetam sistema nervoso, cardiovascular, respiratório e outros", "Só causam dependência", "Apenas efeitos temporários"],
-                    correct: 2,
-                    feedback: {
-                        correct: "🫀 Perfeito! Drogas afetam múltiplos sistemas corporais simultaneamente.",
-                        incorrect: "❌ Drogas causam danos em vários sistemas do organismo."
-                    }
-                },
-                {
-                    question: "Qual a diferença entre tolerância e dependência?",
-                    choices: ["São a mesma coisa", "Tolerância é precisar de mais, dependência é não conseguir parar", "Não há diferença", "Tolerância é pior", "Dependência não existe"],
-                    correct: 1,
-                    feedback: {
-                        correct: "📈 Excelente! Tolerância e dependência são processos relacionados mas distintos.",
-                        incorrect: "❌ Tolerância é precisar de mais droga, dependência é não conseguir parar."
-                    }
-                },
-                {
-                    question: "Como identificar e lidar com situações de overdose?",
-                    choices: ["Ignorar a situação", "Dar mais drogas", "Chamar emergência, manter vias aéreas livres, não deixar sozinho", "Dar água gelada", "Esperar passar"],
-                    correct: 2,
-                    feedback: {
-                        correct: "🚨 Correto! Overdose é emergência médica que requer ação imediata.",
-                        incorrect: "❌ Overdose é emergência: chame ajuda médica imediatamente."
-                    }
-                },
-                {
-                    question: "Qual o impacto das drogas no desenvolvimento cerebral adolescente?",
-                    choices: ["Não afeta adolescentes", "Acelera o desenvolvimento", "Prejudica gravemente o desenvolvimento neural", "Só afeta adultos", "Melhora a capacidade"],
-                    correct: 2,
-                    feedback: {
-                        correct: "🧠 Perfeito! O cérebro adolescente é especialmente vulnerável às drogas.",
-                        incorrect: "❌ Drogas prejudicam gravemente o desenvolvimento do cérebro jovem."
-                    }
-                },
-                {
-                    question: "Como as drogas afetam a gravidez e o desenvolvimento fetal?",
-                    choices: ["Não afetam", "Só afetam a mãe", "Causam malformações, prematuridade e síndrome de abstinência", "Melhoram o desenvolvimento", "Só álcool é perigoso"],
-                    correct: 2,
-                    feedback: {
-                        correct: "👶 Correto! Drogas na gravidez causam sérios danos ao bebê.",
-                        incorrect: "❌ Drogas na gravidez causam graves problemas ao desenvolvimento fetal."
-                    }
-                },
-                {
-                    question: "Qual a relação entre drogas e doenças mentais?",
-                    choices: ["Não há relação", "Drogas curam doenças mentais", "Podem causar ou agravar transtornos mentais", "Só pessoas doentes usam", "Melhoram a saúde mental"],
-                    correct: 2,
-                    feedback: {
-                        correct: "🧠 Excelente! Drogas podem causar ou piorar problemas de saúde mental.",
-                        incorrect: "❌ Drogas podem causar ou agravar transtornos mentais."
-                    }
-                },
-                {
-                    question: "Como funciona o tratamento da dependência química?",
-                    choices: ["Não tem tratamento", "Só internação", "Abordagem multidisciplinar: médica, psicológica e social", "Só medicamentos", "Só força de vontade"],
-                    correct: 2,
-                    feedback: {
-                        correct: "🏥 Perfeito! Tratamento eficaz envolve múltiplas abordagens profissionais.",
-                        incorrect: "❌ Tratamento requer abordagem médica, psicológica e social integrada."
-                    }
-                },
-                {
-                    question: "Qual o papel da família no processo de recuperação?",
-                    choices: ["Família não importa", "Só atrapalha", "É fundamental para apoio, motivação e reinserção", "Deve se afastar", "Só causa problemas"],
-                    correct: 2,
-                    feedback: {
-                        correct: "👨‍👩‍👧‍👦 Excelente! Apoio familiar é crucial para recuperação bem-sucedida.",
-                        incorrect: "❌ Família é fundamental no processo de recuperação do dependente."
-                    }
-                },
-                {
-                    question: "Como prevenir recaídas no processo de recuperação?",
-                    choices: ["É impossível", "Só com medicamentos", "Identificar gatilhos, ter rede de apoio e estratégias de enfrentamento", "Evitar todas as pessoas", "Mudar de cidade"],
-                    correct: 2,
-                    feedback: {
-                        correct: "🔄 Correto! Prevenção de recaídas requer estratégias específicas e apoio.",
-                        incorrect: "❌ Prevenção de recaídas envolve identificar gatilhos e ter estratégias."
-                    }
-                },
-                {
-                    question: "Qual a importância da reinserção social após o tratamento?",
-                    choices: ["Não é importante", "É impossível", "É essencial para manter a recuperação e reconstruir a vida", "Só causa problemas", "Deve ser evitada"],
-                    correct: 2,
-                    feedback: {
-                        correct: "🌱 Perfeito! Reinserção social é fundamental para recuperação duradoura.",
-                        incorrect: "❌ Reinserção social é essencial para manter a recuperação."
-                    }
-                },
-                {
-                    question: "Como as políticas públicas podem combater o problema das drogas?",
-                    choices: ["Só com punição", "Ignorando o problema", "Combinando prevenção, tratamento e redução de danos", "Só com educação", "Liberando todas as drogas"],
-                    correct: 2,
-                    feedback: {
-                        correct: "🏛️ Excelente! Abordagem integrada é mais eficaz no combate às drogas.",
-                        incorrect: "❌ Políticas eficazes combinam prevenção, tratamento e redução de danos."
-                    }
-                },
-                {
-                    question: "Qual o papel da educação na prevenção ao uso de drogas?",
-                    choices: ["Não tem papel", "Só assusta", "Fornece informação, desenvolve habilidades e promove reflexão", "É perda de tempo", "Só funciona com adultos"],
-                    correct: 2,
-                    feedback: {
-                        correct: "📚 Correto! Educação é ferramenta fundamental na prevenção às drogas.",
-                        incorrect: "❌ Educação é essencial para prevenção, fornecendo informação e habilidades."
-                    }
-                }
-            ],
-            phase5: [ // Desafio Final
-                {
-                    question: "Em uma situação complexa onde um amigo próximo está oferecendo drogas em uma festa, alegando que 'todo mundo está usando' e que você 'não vai ser aceito' se não participar, qual seria a melhor estratégia de recusa?",
-                    choices: [
-                        "Aceitar para manter a amizade e fingir que usa",
-                        "Usar técnicas de recusa assertiva, sugerir atividades alternativas e, se necessário, sair da situação",
-                        "Confrontar agressivamente o amigo na frente de todos",
-                        "Ignorar completamente e se afastar sem explicação",
-                        "Aceitar 'só desta vez' para não criar conflito"
-                    ],
-                    correct: 1,
-                    feedback: {
-                        correct: "🌟 Excelente! Esta é a abordagem mais madura e eficaz para lidar com pressão social.",
-                        incorrect: "❌ A recusa assertiva com alternativas é a melhor estratégia nessas situações."
-                    }
-                },
-                {
-                    question: "Considerando os fatores neurobiológicos, psicológicos e sociais, qual é a explicação mais completa sobre por que algumas pessoas desenvolvem dependência química?",
-                    choices: [
-                        "É apenas uma questão de falta de força de vontade",
-                        "Resulta da interação complexa entre predisposição genética, fatores ambientais, experiências pessoais e características neurobiológicas",
-                        "Acontece apenas com pessoas de baixa renda",
-                        "É causada exclusivamente por problemas familiares",
-                        "Só afeta pessoas com transtornos mentais preexistentes"
-                    ],
-                    correct: 1,
-                    feedback: {
-                        correct: "🧠 Perfeito! Dependência é um fenômeno multifatorial complexo.",
-                        incorrect: "❌ Dependência resulta da interação de múltiplos fatores biológicos, psicológicos e sociais."
-                    }
-                },
-                {
-                    question: "Qual seria a abordagem mais eficaz para ajudar um colega que você suspeita estar usando drogas?",
-                    choices: [
-                        "Confrontá-lo publicamente para que pare",
-                        "Ignorar a situação pois não é problema seu",
-                        "Aproximar-se com empatia, expressar preocupação, oferecer apoio e sugerir busca por ajuda profissional",
-                        "Contar para todos os amigos para que façam pressão",
-                        "Ameaçar contar para os pais se não parar"
-                    ],
-                    correct: 2,
-                    feedback: {
-                        correct: "🤝 Excelente! Abordagem empática e apoio são fundamentais para ajudar alguém.",
-                        incorrect: "❌ Empatia, apoio e sugestão de ajuda profissional são a melhor abordagem."
-                    }
-                },
-                {
-                    question: "Analisando as estratégias de prevenção, qual modelo é mais eficaz para reduzir o uso de drogas entre jovens?",
-                    choices: [
-                        "Apenas campanhas de medo mostrando consequências extremas",
-                        "Programas abrangentes que combinam educação, desenvolvimento de habilidades sociais, fortalecimento de fatores de proteção e envolvimento da comunidade",
-                        "Somente punições severas para usuários",
-                        "Apenas informações sobre os efeitos das drogas",
-                        "Programas focados exclusivamente em abstinência total"
-                    ],
-                    correct: 1,
-                    feedback: {
-                        correct: "🎯 Perfeito! Abordagens abrangentes são mais eficazes na prevenção.",
-                        incorrect: "❌ Programas abrangentes que combinam múltiplas estratégias são mais eficazes."
-                    }
-                },
-                {
-                    question: "Em termos de políticas públicas, qual abordagem tem se mostrado mais eficaz no combate ao problema das drogas?",
-                    choices: [
-                        "Foco exclusivo na repressão e criminalização",
-                        "Liberação total de todas as substâncias",
-                        "Abordagem de saúde pública que combina prevenção, tratamento, redução de danos e justiça restaurativa",
-                        "Apenas campanhas educativas",
-                        "Somente internação compulsória de usuários"
-                    ],
-                    correct: 2,
-                    feedback: {
-                        correct: "🏛️ Excelente! Abordagem de saúde pública integrada é mais eficaz e humana.",
-                        incorrect: "❌ Abordagem de saúde pública integrada tem melhores resultados."
-                    }
-                },
-                {
-                    question: "Considerando o desenvolvimento de habilidades de vida, quais são os elementos mais importantes para fortalecer a resistência às drogas?",
-                    choices: [
-                        "Apenas conhecimento sobre drogas",
-                        "Autoestima, habilidades de comunicação, tomada de decisão, manejo de estresse e estabelecimento de objetivos",
-                        "Somente evitar pessoas que usam drogas",
-                        "Apenas medo das consequências",
-                        "Somente supervisão constante dos pais"
-                    ],
-                    correct: 1,
-                    feedback: {
-                        correct: "💪 Perfeito! Habilidades de vida são a base da resistência às drogas.",
-                        incorrect: "❌ Desenvolvimento de múltiplas habilidades de vida fortalece a resistência."
-                    }
-                },
-                {
-                    question: "Qual é a compreensão mais atual sobre o papel da espiritualidade e propósito de vida na prevenção ao uso de drogas?",
-                    choices: [
-                        "Não tem relevância alguma",
-                        "Só funciona para pessoas religiosas",
-                        "Senso de propósito, valores e conexão espiritual são fatores protetivos importantes",
-                        "É prejudicial pois cria fanatismo",
-                        "Só funciona em comunidades específicas"
-                    ],
-                    correct: 2,
-                    feedback: {
-                        correct: "🌟 Correto! Propósito de vida e espiritualidade são fatores protetivos reconhecidos.",
-                        incorrect: "❌ Senso de propósito e espiritualidade são importantes fatores de proteção."
-                    }
-                },
-                {
-                    question: "Como a tecnologia e redes sociais podem ser utilizadas de forma positiva na prevenção às drogas?",
-                    choices: [
-                        "Não podem ser utilizadas positivamente",
-                        "Apenas para vigiar jovens",
-                        "Para educação interativa, redes de apoio, acesso a recursos e campanhas de conscientização",
-                        "Somente para bloquear conteúdo relacionado a drogas",
-                        "Apenas para denunciar usuários"
-                    ],
-                    correct: 2,
-                    feedback: {
-                        correct: "📱 Excelente! Tecnologia pode ser poderosa ferramenta de prevenção quando bem utilizada.",
-                        incorrect: "❌ Tecnologia pode ser usada positivamente para educação e apoio na prevenção."
-                    }
-                },
-                {
-                    question: "Qual é a abordagem mais eficaz para lidar com a questão das drogas no ambiente escolar?",
-                    choices: [
-                        "Tolerância zero com expulsão imediata",
-                        "Ignorar o problema para não criar pânico",
-                        "Política clara, educação preventiva, apoio aos estudantes, envolvimento das famílias e parcerias com serviços de saúde",
-                        "Apenas punições disciplinares",
-                        "Somente palestras esporádicas"
-                    ],
-                    correct: 2,
-                    feedback: {
-                        correct: "🏫 Perfeito! Abordagem integrada na escola é mais eficaz e educativa.",
-                        incorrect: "❌ Escolas precisam de abordagem integrada que combine educação, apoio e políticas claras."
-                    }
-                },
-                {
-                    question: "Considerando a neuroplasticidade cerebral, qual é a perspectiva mais esperançosa sobre recuperação da dependência?",
-                    choices: [
-                        "Dependência causa danos irreversíveis",
-                        "Só jovens podem se recuperar completamente",
-                        "O cérebro tem capacidade de se reorganizar e recuperar, especialmente com tratamento adequado e mudanças de estilo de vida",
-                        "Recuperação é impossível após certo tempo de uso",
-                        "Apenas medicamentos podem reverter os danos"
-                    ],
-                    correct: 2,
-                    feedback: {
-                        correct: "🧠 Excelente! Neuroplasticidade oferece esperança real de recuperação.",
-                        incorrect: "❌ Neuroplasticidade permite recuperação cerebral com tratamento adequado."
-                    }
-                },
-                {
-                    question: "Qual é o papel mais importante da comunidade na criação de um ambiente resistente às drogas?",
-                    choices: [
-                        "Apenas vigiar e denunciar usuários",
-                        "Ignorar o problema pois é responsabilidade individual",
-                        "Criar rede de apoio, oferecer oportunidades positivas, fortalecer vínculos sociais e promover valores comunitários",
-                        "Somente apoiar a repressão policial",
-                        "Apenas financiar campanhas publicitárias"
-                    ],
-                    correct: 2,
-                    feedback: {
-                        correct: "🏘️ Perfeito! Comunidades fortes e unidas são a melhor prevenção às drogas.",
-                        incorrect: "❌ Comunidades devem criar redes de apoio e oportunidades positivas."
-                    }
-                },
-                {
-                    question: "Como integrar efetivamente a prevenção às drogas com a promoção da saúde mental?",
-                    choices: [
-                        "São questões completamente separadas",
-                        "Focar apenas na saúde mental",
-                        "Desenvolver programas que abordem fatores de risco comuns, promovam bem-estar emocional e ensinem estratégias de enfrentamento saudáveis",
-                        "Tratar apenas após o problema aparecer",
-                        "Focar apenas na prevenção às drogas"
-                    ],
-                    correct: 2,
-                    feedback: {
-                        correct: "🧠💚 Excelente! Saúde mental e prevenção às drogas estão intimamente relacionadas.",
-                        incorrect: "❌ Prevenção às drogas e promoção da saúde mental devem ser integradas."
-                    }
-                },
-                {
-                    question: "Qual é a importância da abordagem de gênero na prevenção ao uso de drogas?",
-                    choices: [
-                        "Gênero não influencia o uso de drogas",
-                        "Apenas mulheres precisam de abordagem específica",
-                        "Homens e mulheres têm fatores de risco e padrões de uso diferentes, requerendo estratégias adaptadas",
-                        "Apenas homens usam drogas",
-                        "Abordagem única serve para todos"
-                    ],
-                    correct: 2,
-                    feedback: {
-                        correct: "⚖️ Correto! Diferenças de gênero são importantes na prevenção e tratamento.",
-                        incorrect: "❌ Fatores de gênero influenciam padrões de uso e requerem abordagens específicas."
-                    }
-                },
-                {
-                    question: "Como avaliar a eficácia de programas de prevenção às drogas?",
-                    choices: [
-                        "Apenas pela popularidade do programa",
-                        "Somente pelo número de participantes",
-                        "Através de indicadores múltiplos: redução do uso, mudanças de atitude, desenvolvimento de habilidades e impacto a longo prazo",
-                        "Apenas pelo custo do programa",
-                        "Somente pela satisfação dos participantes"
-                    ],
-                    correct: 2,
-                    feedback: {
-                        correct: "📊 Perfeito! Avaliação eficaz requer múltiplos indicadores e acompanhamento longitudinal.",
-                        incorrect: "❌ Eficácia deve ser medida por múltiplos indicadores e resultados a longo prazo."
-                    }
-                },
-                {
-                    question: "Qual é a visão mais atual sobre o papel da redução de danos na política de drogas?",
-                    choices: [
-                        "É uma estratégia que incentiva o uso",
-                        "Deve ser a única abordagem utilizada",
-                        "É uma estratégia complementar que visa minimizar riscos enquanto trabalha pela recuperação",
-                        "Só funciona com drogas específicas",
-                        "É uma abordagem ultrapassada"
-                    ],
-                    correct: 2,
-                    feedback: {
-                        correct: "🛡️ Excelente! Redução de danos é estratégia complementar baseada em evidências.",
-                        incorrect: "❌ Redução de danos é estratégia complementar que salva vidas e facilita recuperação."
-                    }
-                }
-            ]
+            aboutContent: '',
+            partners: [],
+            logos: {
+                proerd: '',
+                pm: ''
+            }
         };
 
+        // Carregar dados salvos
+        function loadSystemData() {
+            const saved = localStorage.getItem('proerdSystemData');
+            if (saved) {
+                systemData = { ...systemData, ...JSON.parse(saved) };
+            }
+            updateAboutDisplay();
+            updatePartnersDisplay();
+        }
+
+        // Salvar dados
+        function saveSystemData() {
+            localStorage.setItem('proerdSystemData', JSON.stringify(systemData));
+        }
+
+        // Navegação
+        function showScreen(screenId) {
+            document.querySelectorAll('.game-screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.getElementById(screenId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Configurar nome do jogador
         function setPlayerName() {
             const nameInput = document.getElementById('player-name');
             playerName = nameInput.value.trim();
@@ -1291,505 +954,775 @@
                 return;
             }
             
-            document.getElementById('welcome-message').textContent = `Olá, ${playerName}! 🌟`;
-            document.getElementById('name-screen').classList.remove('active');
-            document.getElementById('start-screen').classList.add('active');
+            showScreen('phases');
         }
 
-        function startGame() {
-            document.getElementById('start-screen').classList.remove('active');
-            document.getElementById('game-screen').classList.add('active');
-            currentPhase = 1;
+        // Iniciar fase específica
+        function startPhase(phase) {
+            if (!playerName) {
+                alert('Por favor, digite seu nome primeiro!');
+                showScreen('home');
+                return;
+            }
+            
+            currentPhase = phase;
             currentQuestion = 0;
             totalScore = 0;
-            showQuestion();
+            // Implementar lógica das fases aqui
+            alert(`Iniciando Fase ${phase}! (Em desenvolvimento)`);
         }
 
-        function showQuestion() {
-            const phaseData = gameData[`phase${currentPhase}`];
-            const question = phaseData[currentQuestion];
-            
-            // Atualizar informações da fase
-            document.getElementById('phase-info').textContent = `Fase ${currentPhase} - Questão ${currentQuestion + 1} de ${questionsPerPhase[currentPhase - 1]}`;
-            
-            // Atualizar informações do jogador
-            document.getElementById('player-display').textContent = `${playerName} - ${totalScore} pontos`;
-            
-            // Atualizar barra de progresso
-            const progress = (currentQuestion / questionsPerPhase[currentPhase - 1]) * 100;
-            document.getElementById('progress-fill').style.width = progress + '%';
-            
-            // Mostrar questão
-            document.getElementById('scenario-text').innerHTML = `<h3>${question.question}</h3>`;
-            
-            const choicesContainer = document.getElementById('choices-container');
-            choicesContainer.innerHTML = '';
-            
-            if (currentPhase === 1) {
-                // Verdadeiro ou Falso
-                choicesContainer.className = 'choices true-false-buttons';
-                const trueBtn = document.createElement('button');
-                trueBtn.className = 'choice-btn';
-                trueBtn.textContent = '✅ Verdadeiro';
-                trueBtn.onclick = () => makeChoice(true);
-                
-                const falseBtn = document.createElement('button');
-                falseBtn.className = 'choice-btn';
-                falseBtn.textContent = '❌ Falso';
-                falseBtn.onclick = () => makeChoice(false);
-                
-                choicesContainer.appendChild(trueBtn);
-                choicesContainer.appendChild(falseBtn);
-            } else {
-                // Múltipla escolha
-                choicesContainer.className = 'choices';
-                question.choices.forEach((choice, index) => {
-                    const button = document.createElement('button');
-                    button.className = 'choice-btn';
-                    button.textContent = choice;
-                    button.onclick = () => makeChoice(index);
-                    choicesContainer.appendChild(button);
-                });
+        // Jogo 3D
+        function startGame3D() {
+            if (!playerName) {
+                alert('Por favor, digite seu nome primeiro!');
+                showScreen('home');
+                return;
             }
             
-            document.getElementById('feedback').style.display = 'none';
-            document.getElementById('points-earned').style.display = 'none';
-            document.getElementById('next-btn').style.display = 'none';
-            
-            // Iniciar timer
-            startTimer();
+            showScreen('game-3d-screen');
+            initGame3D();
         }
 
-        function startTimer() {
-            timeLeft = 45;
-            startTime = Date.now();
-            updateTimerDisplay();
+        function initGame3D() {
+            game3DScore = 0;
+            game3DTimer = 90;
+            game3DLives = 3;
+            game3DPaused = false;
+            lion3DPosition = { x: 0, y: 50, z: 0, jumping: false, ducking: false };
             
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                updateTimerDisplay();
-                
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    timeUp();
-                }
-            }, 1000);
-        }
-
-        function updateTimerDisplay() {
-            const timerElement = document.getElementById('timer');
-            timerElement.textContent = timeLeft + 's';
+            updateGame3DDisplay();
             
-            if (timeLeft <= 10) {
-                timerElement.classList.add('warning');
-            } else {
-                timerElement.classList.remove('warning');
-            }
-        }
-
-        function timeUp() {
-            const buttons = document.querySelectorAll('.choice-btn');
-            buttons.forEach(btn => btn.disabled = true);
-            
-            const feedback = document.getElementById('feedback');
-            feedback.innerHTML = "⏰ Tempo esgotado! O Leão ficou confuso e não conseguiu decidir a tempo. Lembre-se: em situações de risco, é importante agir rapidamente!";
-            feedback.style.borderLeftColor = '#FF6B6B';
-            feedback.style.display = 'block';
-            
-            const pointsElement = document.getElementById('points-earned');
-            pointsElement.textContent = "0 pontos ganhos";
-            pointsElement.style.display = 'block';
-            
-            showNextButton();
-        }
-
-        function makeChoice(choice) {
-            clearInterval(timerInterval);
-            
-            const phaseData = gameData[`phase${currentPhase}`];
-            const question = phaseData[currentQuestion];
-            const buttons = document.querySelectorAll('.choice-btn');
-            
-            // Calcular pontos baseado no tempo
-            const timeUsed = (Date.now() - startTime) / 1000;
-            let points = 0;
-            let isCorrect = false;
-            
-            if (currentPhase === 1) {
-                // Verdadeiro ou Falso
-                isCorrect = choice === question.correct;
-            } else {
-                // Múltipla escolha
-                isCorrect = choice === question.correct;
-            }
-            
-            if (isCorrect) {
-                points = Math.max(100, Math.floor(1000 - (timeUsed * 600)));
-                totalScore += points;
-            }
-            
-            // Desabilitar todos os botões
-            buttons.forEach(btn => btn.disabled = true);
-            
-            // Marcar respostas
-            if (currentPhase === 1) {
-                buttons.forEach((btn, index) => {
-                    if ((index === 0 && question.correct) || (index === 1 && !question.correct)) {
-                        btn.classList.add('correct');
-                    } else {
-                        btn.classList.add('incorrect');
+            // Timer do jogo
+            game3DInterval = setInterval(() => {
+                if (!game3DPaused) {
+                    game3DTimer--;
+                    updateGame3DDisplay();
+                    
+                    if (game3DTimer <= 0 || game3DLives <= 0) {
+                        endGame3D();
                     }
-                });
-            } else {
-                buttons.forEach((btn, index) => {
-                    if (index === question.correct) {
-                        btn.classList.add('correct');
-                    } else {
-                        btn.classList.add('incorrect');
-                    }
-                });
-            }
-            
-            // Mostrar feedback
-            const feedback = document.getElementById('feedback');
-            if (isCorrect) {
-                feedback.innerHTML = question.feedback.correct;
-                feedback.style.borderLeftColor = '#4ECDC4';
-            } else {
-                feedback.innerHTML = question.feedback.incorrect;
-                feedback.style.borderLeftColor = '#FF6B6B';
-            }
-            
-            feedback.style.display = 'block';
-            
-            // Mostrar pontos ganhos
-            const pointsElement = document.getElementById('points-earned');
-            if (isCorrect) {
-                pointsElement.textContent = `🎉 +${points} pontos! (Respondeu em ${timeUsed.toFixed(1)}s)`;
-                pointsElement.style.background = 'linear-gradient(45deg, #FFD700, #FFA500)';
-            } else {
-                pointsElement.textContent = "❌ 0 pontos (Resposta incorreta)";
-                pointsElement.style.background = 'linear-gradient(45deg, #FFB6C1, #FFA07A)';
-            }
-            pointsElement.style.display = 'block';
-            
-            showNextButton();
-        }
-
-        function showNextButton() {
-            const nextBtn = document.getElementById('next-btn');
-            
-            if (currentQuestion < questionsPerPhase[currentPhase - 1] - 1) {
-                nextBtn.textContent = 'Próxima Questão →';
-                nextBtn.style.display = 'inline-block';
-            } else if (currentPhase < 5) {
-                nextBtn.textContent = `Ir para Fase ${currentPhase + 1} →`;
-                nextBtn.style.display = 'inline-block';
-            } else {
-                nextBtn.textContent = 'Fase Final - Jogo 2D →';
-                nextBtn.style.display = 'inline-block';
-            }
-        }
-
-        function nextQuestion() {
-            currentQuestion++;
-            
-            if (currentQuestion < questionsPerPhase[currentPhase - 1]) {
-                showQuestion();
-            } else if (currentPhase < 5) {
-                currentPhase++;
-                currentQuestion = 0;
-                showQuestion();
-            } else {
-                start2DGame();
-            }
-        }
-
-        function start2DGame() {
-            document.getElementById('game-screen').classList.remove('active');
-            document.getElementById('game-2d-screen').classList.add('active');
-            
-            game2DScore = 0;
-            game2DTimer = 60;
-            game2DLives = 3;
-            lionPosition = { x: 50, y: 50, jumping: false, ducking: false };
-            
-            updateGame2DDisplay();
-            
-            // Iniciar timer do jogo 2D
-            game2DInterval = setInterval(() => {
-                game2DTimer--;
-                updateGame2DDisplay();
-                
-                if (game2DTimer <= 0 || game2DLives <= 0) {
-                    endGame2D();
                 }
             }, 1000);
             
-            // Iniciar spawn de obstáculos e coletáveis
-            obstacleInterval = setInterval(spawnObstacle, 2000);
-            collectibleInterval = setInterval(spawnCollectible, 3000);
+            // Spawn de obstáculos e coletáveis
+            obstacle3DInterval = setInterval(() => {
+                if (!game3DPaused) spawnObstacle3D();
+            }, 2500);
+            
+            collectible3DInterval = setInterval(() => {
+                if (!game3DPaused) spawnCollectible3D();
+            }, 3500);
         }
 
-        function updateGame2DDisplay() {
-            document.getElementById('game-2d-score').textContent = game2DScore;
-            document.getElementById('game-2d-timer').textContent = game2DTimer;
-            document.getElementById('game-2d-lives').textContent = game2DLives;
+        function updateGame3DDisplay() {
+            document.getElementById('game-3d-score').textContent = game3DScore;
+            document.getElementById('game-3d-timer').textContent = game3DTimer;
+            document.getElementById('game-3d-lives').textContent = game3DLives;
         }
 
-        function spawnObstacle() {
-            const container = document.getElementById('game-2d-container');
+        function spawnObstacle3D() {
+            const container = document.getElementById('game-3d-container');
             const obstacle = document.createElement('div');
-            obstacle.className = 'obstacle';
+            obstacle.className = 'obstacle-3d';
             obstacle.textContent = '☠️';
-            obstacle.style.bottom = '50px';
             obstacle.style.right = '-100px';
+            obstacle.style.bottom = Math.random() > 0.5 ? '50px' : '100px';
             
             container.appendChild(obstacle);
             
-            // Verificar colisão
-            const checkCollision = setInterval(() => {
-                const obstacleRect = obstacle.getBoundingClientRect();
-                const lionRect = document.getElementById('lion-2d').getBoundingClientRect();
-                
-                if (obstacleRect.left < lionRect.right && 
-                    obstacleRect.right > lionRect.left && 
-                    obstacleRect.top < lionRect.bottom && 
-                    obstacleRect.bottom > lionRect.top &&
-                    !lionPosition.jumping && !lionPosition.ducking) {
-                    
-                    game2DLives--;
-                    updateGame2DDisplay();
+            setTimeout(() => {
+                if (obstacle.parentNode) {
                     obstacle.remove();
-                    clearInterval(checkCollision);
-                    
-                    if (game2DLives <= 0) {
-                        endGame2D();
-                    }
                 }
-                
-                if (obstacleRect.right < 0) {
-                    obstacle.remove();
-                    clearInterval(checkCollision);
-                }
-            }, 50);
+            }, 4000);
         }
 
-        function spawnCollectible() {
-            const container = document.getElementById('game-2d-container');
+        function spawnCollectible3D() {
+            const container = document.getElementById('game-3d-container');
             const collectible = document.createElement('div');
-            collectible.className = 'collectible';
+            collectible.className = 'collectible-3d';
             collectible.textContent = '🏅';
-            collectible.style.bottom = Math.random() > 0.5 ? '100px' : '150px';
             collectible.style.right = '-100px';
+            collectible.style.bottom = Math.random() * 200 + 50 + 'px';
             
             container.appendChild(collectible);
             
-            // Verificar coleta
-            const checkCollection = setInterval(() => {
-                const collectibleRect = collectible.getBoundingClientRect();
-                const lionRect = document.getElementById('lion-2d').getBoundingClientRect();
-                
-                if (collectibleRect.left < lionRect.right && 
-                    collectibleRect.right > lionRect.left && 
-                    collectibleRect.top < lionRect.bottom && 
-                    collectibleRect.bottom > lionRect.top) {
-                    
-                    game2DScore += 100;
-                    updateGame2DDisplay();
+            setTimeout(() => {
+                if (collectible.parentNode) {
                     collectible.remove();
-                    clearInterval(checkCollection);
                 }
-                
-                if (collectibleRect.right < 0) {
-                    collectible.remove();
-                    clearInterval(checkCollection);
+            }, 5000);
+        }
+
+        function startMove3D(direction) {
+            move3DDirection = direction;
+            move3DInterval = setInterval(() => {
+                const lion = document.getElementById('lion-3d');
+                if (direction === 'left' && lion3DPosition.x > -200) {
+                    lion3DPosition.x -= 10;
+                    lion.style.transform = `translateX(calc(-50% + ${lion3DPosition.x}px)) rotateY(-20deg)`;
+                } else if (direction === 'right' && lion3DPosition.x < 200) {
+                    lion3DPosition.x += 10;
+                    lion.style.transform = `translateX(calc(-50% + ${lion3DPosition.x}px)) rotateY(20deg)`;
                 }
             }, 50);
         }
 
-        function startMove(direction) {
-            moveDirection = direction;
-            moveInterval = setInterval(() => {
-                const lion = document.getElementById('lion-2d');
-                if (direction === 'left' && lionPosition.x > 10) {
-                    lionPosition.x -= 5;
-                    lion.style.left = lionPosition.x + 'px';
-                } else if (direction === 'right' && lionPosition.x < 750) {
-                    lionPosition.x += 5;
-                    lion.style.left = lionPosition.x + 'px';
-                }
-            }, 50);
+        function stopMove3D() {
+            clearInterval(move3DInterval);
+            const lion = document.getElementById('lion-3d');
+            lion.style.transform = `translateX(calc(-50% + ${lion3DPosition.x}px)) rotateY(0deg)`;
         }
 
-        function stopMove() {
-            clearInterval(moveInterval);
-            moveDirection = '';
-        }
-
-        function jump() {
-            if (!lionPosition.jumping) {
-                lionPosition.jumping = true;
-                const lion = document.getElementById('lion-2d');
-                lion.style.bottom = '120px';
+        function jump3D() {
+            if (!lion3DPosition.jumping) {
+                lion3DPosition.jumping = true;
+                const lion = document.getElementById('lion-3d');
+                lion.style.bottom = '150px';
+                lion.style.transform += ' scale(1.2)';
                 
                 setTimeout(() => {
                     lion.style.bottom = '50px';
-                    lionPosition.jumping = false;
-                }, 600);
-            }
-        }
-
-        function duck() {
-            if (!lionPosition.ducking) {
-                lionPosition.ducking = true;
-                const lion = document.getElementById('lion-2d');
-                lion.style.bottom = '20px';
-                lion.textContent = '🦁';
-                
-                setTimeout(() => {
-                    lion.style.bottom = '50px';
-                    lionPosition.ducking = false;
+                    lion.style.transform = lion.style.transform.replace(' scale(1.2)', '');
+                    lion3DPosition.jumping = false;
                 }, 800);
             }
         }
 
-        function endGame2D() {
-            clearInterval(game2DInterval);
-            clearInterval(obstacleInterval);
-            clearInterval(collectibleInterval);
-            
-            totalScore += game2DScore;
-            
-            document.getElementById('finish-2d-btn').style.display = 'inline-block';
-        }
-
-        function finish2DGame() {
-            showFinalScreen();
-        }
-
-        function showFinalScreen() {
-            document.getElementById('game-2d-screen').classList.remove('active');
-            document.getElementById('final-screen').classList.add('active');
-            
-            const maxPossibleScore = (questionsPerPhase.reduce((a, b) => a + b, 0) * 1000) + 6000; // 6000 pontos máximos no jogo 2D
-            const percentage = (totalScore / maxPossibleScore) * 100;
-            let medal, message;
-            
-            if (percentage >= 80) {
-                medal = '🏆';
-                message = `<h3>MESTRE DO PROERD!</h3><p>Incrível, ${playerName}! Você dominou todas as 6 fases com excelência! Você é um verdadeiro herói da prevenção às drogas e à violência!</p>`;
-            } else if (percentage >= 60) {
-                medal = '🥈';
-                message = `<h3>GUARDIÃO CORAJOSO!</h3><p>Parabéns, ${playerName}! Você mostrou grande conhecimento e habilidade. Continue praticando para se tornar um mestre!</p>`;
-            } else if (percentage >= 40) {
-                medal = '🥉';
-                message = `<h3>APRENDIZ DEDICADO!</h3><p>Bom trabalho, ${playerName}! Você está no caminho certo. Continue estudando e praticando!</p>`;
-            } else {
-                medal = '📚';
-                message = `<h3>ESTUDANTE EM FORMAÇÃO!</h3><p>Continue se esforçando, ${playerName}! Cada tentativa é um aprendizado. Você pode melhorar muito!</p>`;
+        function duck3D() {
+            if (!lion3DPosition.ducking) {
+                lion3DPosition.ducking = true;
+                const lion = document.getElementById('lion-3d');
+                lion.style.bottom = '20px';
+                lion.style.transform += ' scale(0.8)';
+                
+                setTimeout(() => {
+                    lion.style.bottom = '50px';
+                    lion.style.transform = lion.style.transform.replace(' scale(0.8)', '');
+                    lion3DPosition.ducking = false;
+                }, 1000);
             }
-            
-            document.getElementById('final-medal').textContent = medal;
-            document.getElementById('final-score').textContent = `${playerName}: ${totalScore} pontos`;
-            document.getElementById('final-message').innerHTML = message;
-            
-            // Salvar e mostrar ranking
-            saveScore();
-            showLeaderboard();
         }
 
-        function saveScore() {
-            let scores = JSON.parse(localStorage.getItem('proerdScores') || '[]');
-            scores.push({
-                name: playerName,
-                score: totalScore,
-                date: new Date().toLocaleDateString('pt-BR')
+        function specialAction() {
+            game3DScore += 50;
+            updateGame3DDisplay();
+            
+            // Efeito visual
+            const lion = document.getElementById('lion-3d');
+            lion.style.filter = 'brightness(1.5) drop-shadow(0 0 20px gold)';
+            setTimeout(() => {
+                lion.style.filter = '';
+            }, 500);
+        }
+
+        function pauseGame3D() {
+            game3DPaused = !game3DPaused;
+            const btn = event.target;
+            btn.textContent = game3DPaused ? '▶️' : '⏸️';
+        }
+
+        function endGame3D() {
+            clearInterval(game3DInterval);
+            clearInterval(obstacle3DInterval);
+            clearInterval(collectible3DInterval);
+            
+            totalScore += game3DScore;
+            alert(`Jogo 3D finalizado! Pontuação: ${game3DScore} pontos`);
+        }
+
+        // Jogo da Memória
+        function startMemoryGame() {
+            showScreen('memory-game-screen');
+            initMemoryGame();
+        }
+
+        function initMemoryGame() {
+            const symbols = ['🦁', '🛡️', '🏅', '📚', '🎯', '🌟', '💪', '🏆'];
+            const cards = [...symbols, ...symbols];
+            cards.sort(() => Math.random() - 0.5);
+            
+            memoryCards = cards;
+            flippedCards = [];
+            memoryScore = 0;
+            memoryAttempts = 0;
+            memoryPairs = 0;
+            
+            const board = document.getElementById('memory-board');
+            board.innerHTML = '';
+            
+            cards.forEach((symbol, index) => {
+                const card = document.createElement('button');
+                card.className = 'memory-card';
+                card.textContent = '❓';
+                card.onclick = () => flipCard(index);
+                board.appendChild(card);
             });
             
-            // Manter apenas os 10 melhores
-            scores.sort((a, b) => b.score - a.score);
-            scores = scores.slice(0, 10);
-            
-            localStorage.setItem('proerdScores', JSON.stringify(scores));
+            updateMemoryDisplay();
         }
 
-        function showLeaderboard() {
-            const scores = JSON.parse(localStorage.getItem('proerdScores') || '[]');
-            const leaderboard = document.getElementById('leaderboard');
+        function flipCard(index) {
+            if (flippedCards.length >= 2 || flippedCards.includes(index)) return;
             
-            if (scores.length === 0) {
-                leaderboard.innerHTML = '<h3>🏆 Ranking dos Heróis</h3><p>Seja o primeiro no ranking!</p>';
+            const cards = document.querySelectorAll('.memory-card');
+            cards[index].textContent = memoryCards[index];
+            cards[index].classList.add('flipped');
+            flippedCards.push(index);
+            
+            if (flippedCards.length === 2) {
+                memoryAttempts++;
+                setTimeout(checkMatch, 1000);
+            }
+        }
+
+        function checkMatch() {
+            const cards = document.querySelectorAll('.memory-card');
+            const [first, second] = flippedCards;
+            
+            if (memoryCards[first] === memoryCards[second]) {
+                memoryPairs++;
+                memoryScore += 100;
+                cards[first].style.background = 'linear-gradient(45deg, #4ECDC4, #44A08D)';
+                cards[second].style.background = 'linear-gradient(45deg, #4ECDC4, #44A08D)';
+                
+                if (memoryPairs === 8) {
+                    setTimeout(() => {
+                        alert(`Parabéns! Você completou o jogo da memória com ${memoryAttempts} tentativas!`);
+                    }, 500);
+                }
+            } else {
+                cards[first].textContent = '❓';
+                cards[second].textContent = '❓';
+                cards[first].classList.remove('flipped');
+                cards[second].classList.remove('flipped');
+            }
+            
+            flippedCards = [];
+            updateMemoryDisplay();
+        }
+
+        function updateMemoryDisplay() {
+            document.getElementById('memory-score').textContent = memoryScore;
+            document.getElementById('memory-attempts').textContent = memoryAttempts;
+            document.getElementById('memory-pairs').textContent = memoryPairs;
+        }
+
+        function resetMemoryGame() {
+            initMemoryGame();
+        }
+
+        // Quiz Rápido
+        function startQuizGame() {
+            showScreen('quiz-game-screen');
+            initQuizGame();
+        }
+
+        function initQuizGame() {
+            quizQuestions = [
+                {
+                    question: "Qual é o significado da sigla PROERD?",
+                    options: ["Programa de Resistência", "Programa Educacional de Resistência às Drogas", "Projeto de Educação", "Programa de Prevenção"],
+                    correct: 1
+                },
+                {
+                    question: "O que devemos fazer quando alguém oferece drogas?",
+                    options: ["Aceitar para não ofender", "Dizer NÃO com firmeza", "Fingir que aceita", "Ignorar a pessoa"],
+                    correct: 1
+                },
+                {
+                    question: "Qual é o símbolo do PROERD?",
+                    options: ["Águia", "Leão", "Tigre", "Lobo"],
+                    correct: 1
+                },
+                {
+                    question: "O bullying é considerado:",
+                    options: ["Brincadeira normal", "Forma de violência", "Algo sem importância", "Problema só da vítima"],
+                    correct: 1
+                },
+                {
+                    question: "A melhor forma de lidar com problemas é:",
+                    options: ["Usar substâncias", "Buscar ajuda", "Guardar para si", "Ignorar"],
+                    correct: 1
+                },
+                {
+                    question: "O álcool é considerado:",
+                    options: ["Não é droga", "Droga legal", "Inofensivo", "Só para adultos"],
+                    correct: 1
+                },
+                {
+                    question: "Verdadeiros amigos:",
+                    options: ["Oferecem drogas", "Respeitam suas decisões", "Te pressionam", "Te isolam"],
+                    correct: 1
+                },
+                {
+                    question: "O PROERD é desenvolvido por:",
+                    options: ["Professores", "Médicos", "Polícia Militar", "Psicólogos"],
+                    correct: 2
+                },
+                {
+                    question: "A prevenção às drogas deve começar:",
+                    options: ["Na adolescência", "Na infância", "Na idade adulta", "Só quando há problema"],
+                    correct: 1
+                },
+                {
+                    question: "O principal objetivo do PROERD é:",
+                    options: ["Punir usuários", "Prevenir uso de drogas e violência", "Vender medicamentos", "Fazer propaganda"],
+                    correct: 1
+                }
+            ];
+            
+            currentQuizQuestion = 0;
+            quizScore = 0;
+            quizCorrect = 0;
+            
+            showQuizQuestion();
+        }
+
+        function showQuizQuestion() {
+            const question = quizQuestions[currentQuizQuestion];
+            document.getElementById('quiz-question').innerHTML = `<h3>${question.question}</h3>`;
+            
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'scenario-btn';
+                button.textContent = option;
+                button.onclick = () => answerQuiz(index);
+                optionsContainer.appendChild(button);
+            });
+            
+            document.getElementById('quiz-current').textContent = currentQuizQuestion + 1;
+            document.getElementById('quiz-score').textContent = quizScore;
+            document.getElementById('quiz-correct').textContent = quizCorrect;
+            
+            document.getElementById('quiz-feedback').style.display = 'none';
+        }
+
+        function answerQuiz(answer) {
+            const question = quizQuestions[currentQuizQuestion];
+            const feedback = document.getElementById('quiz-feedback');
+            const buttons = document.querySelectorAll('#quiz-options button');
+            
+            buttons.forEach(btn => btn.disabled = true);
+            
+            if (answer === question.correct) {
+                quizCorrect++;
+                quizScore += 100;
+                feedback.innerHTML = "✅ Correto! Muito bem!";
+                feedback.style.background = '#d4edda';
+                feedback.style.color = '#155724';
+            } else {
+                feedback.innerHTML = `❌ Incorreto. A resposta correta é: ${question.options[question.correct]}`;
+                feedback.style.background = '#f8d7da';
+                feedback.style.color = '#721c24';
+            }
+            
+            feedback.style.display = 'block';
+            
+            setTimeout(() => {
+                currentQuizQuestion++;
+                if (currentQuizQuestion < quizQuestions.length) {
+                    showQuizQuestion();
+                } else {
+                    showQuizResults();
+                }
+            }, 2000);
+        }
+
+        function showQuizResults() {
+            const percentage = (quizCorrect / quizQuestions.length) * 100;
+            let message = `Quiz finalizado!\n\nAcertos: ${quizCorrect}/${quizQuestions.length}\nPontuação: ${quizScore}\nPercentual: ${percentage.toFixed(1)}%\n\n`;
+            
+            if (percentage >= 80) {
+                message += "🏆 Excelente! Você domina os conceitos do PROERD!";
+            } else if (percentage >= 60) {
+                message += "👏 Muito bem! Continue estudando!";
+            } else {
+                message += "📚 Continue praticando para melhorar!";
+            }
+            
+            alert(message);
+        }
+
+        // Situações Reais
+        function startScenarioGame() {
+            showScreen('scenario-game-screen');
+            initScenarioGame();
+        }
+
+        function initScenarioGame() {
+            const scenarios = [
+                {
+                    situation: "Você está em uma festa e um colega oferece uma bebida alcoólica, dizendo que 'todo mundo está bebendo' e que você 'não vai ser aceito' se não beber. O que você faz?",
+                    options: [
+                        "Aceito para não parecer diferente",
+                        "Digo NÃO com firmeza e sugiro outras atividades",
+                        "Finjo que bebo mas não bebo",
+                        "Saio da festa imediatamente"
+                    ],
+                    correct: 1,
+                    feedback: "A melhor opção é dizer NÃO com firmeza. Verdadeiros amigos respeitam suas decisões!"
+                },
+                {
+                    situation: "Você presencia um colega sendo intimidado por outros estudantes no pátio da escola. Qual sua atitude?",
+                    options: [
+                        "Ignoro para não me envolver",
+                        "Filmo para postar nas redes sociais",
+                        "Defendo o colega e busco ajuda de um adulto",
+                        "Rio junto com os outros"
+                    ],
+                    correct: 2,
+                    feedback: "Defender quem está sendo intimidado e buscar ajuda é a atitude correta e corajosa!"
+                },
+                {
+                    situation: "Um amigo próximo te conta que está experimentando drogas e pede para você não contar para ninguém. O que você faz?",
+                    options: [
+                        "Prometo não contar e ignoro o problema",
+                        "Converso com ele sobre os riscos e sugiro buscar ajuda",
+                        "Conto imediatamente para os pais dele",
+                        "Experimento junto para apoiá-lo"
+                    ],
+                    correct: 1,
+                    feedback: "Conversar sobre os riscos e sugerir ajuda profissional é a melhor forma de apoiar um amigo!"
+                }
+            ];
+            
+            const randomScenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+            
+            document.getElementById('scenario-situation').innerHTML = `<h3>Situação:</h3><p>${randomScenario.situation}</p>`;
+            
+            const optionsContainer = document.getElementById('scenario-options');
+            optionsContainer.innerHTML = '';
+            
+            randomScenario.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'scenario-btn';
+                button.textContent = option;
+                button.onclick = () => answerScenario(index, randomScenario);
+                optionsContainer.appendChild(button);
+            });
+            
+            document.getElementById('scenario-feedback').style.display = 'none';
+        }
+
+        function answerScenario(answer, scenario) {
+            const feedback = document.getElementById('scenario-feedback');
+            const buttons = document.querySelectorAll('#scenario-options button');
+            
+            buttons.forEach(btn => btn.disabled = true);
+            
+            if (answer === scenario.correct) {
+                feedback.innerHTML = `✅ Excelente escolha! ${scenario.feedback}`;
+                feedback.style.background = '#d4edda';
+                feedback.style.color = '#155724';
+            } else {
+                feedback.innerHTML = `❌ Essa não é a melhor opção. ${scenario.feedback}`;
+                feedback.style.background = '#f8d7da';
+                feedback.style.color = '#721c24';
+            }
+            
+            feedback.style.display = 'block';
+            
+            setTimeout(() => {
+                initScenarioGame();
+            }, 3000);
+        }
+
+        // Outros jogos (implementação básica)
+        function startWordGame() {
+            alert('🔍 Caça-Palavras PROERD em desenvolvimento! Em breve você poderá encontrar palavras relacionadas à prevenção!');
+        }
+
+        function startPuzzleGame() {
+            alert('🧩 Quebra-Cabeça do Leão PROERD em desenvolvimento! Em breve você poderá montar a imagem do nosso mascote!');
+        }
+
+        function startRhymeGame() {
+            alert('🎵 Rimas do PROERD em desenvolvimento! Em breve você poderá completar rimas educativas sobre prevenção!');
+        }
+
+        // Sistema Administrativo
+        function adminLogin() {
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+            
+            const admin = systemData.admins.find(a => a.email === email && a.password === password);
+            
+            if (admin) {
+                isLoggedIn = true;
+                showScreen('admin-panel');
+                loadAdminData();
+            } else {
+                alert('❌ Email ou senha incorretos!');
+            }
+        }
+
+        function adminLogout() {
+            isLoggedIn = false;
+            document.getElementById('admin-email').value = '';
+            document.getElementById('admin-password').value = '';
+            showScreen('admin-login');
+        }
+
+        function loadAdminData() {
+            document.getElementById('about-editor').value = systemData.aboutContent;
+            updateAdminList();
+            updatePartnersAdminList();
+        }
+
+        function updateAbout() {
+            if (!isLoggedIn) return;
+            
+            systemData.aboutContent = document.getElementById('about-editor').value;
+            saveSystemData();
+            updateAboutDisplay();
+            alert('✅ Conteúdo sobre o PROERD atualizado com sucesso!');
+        }
+
+        function updateAboutDisplay() {
+            if (systemData.aboutContent) {
+                document.getElementById('about-content').innerHTML = systemData.aboutContent;
+            }
+        }
+
+        function addAdmin() {
+            if (!isLoggedIn) return;
+            
+            const email = document.getElementById('new-admin-email').value;
+            const password = document.getElementById('new-admin-password').value;
+            
+            if (!email || !password) {
+                alert('❌ Preencha todos os campos!');
                 return;
             }
             
-            let html = '<h3>🏆 Ranking dos Heróis do PROERD</h3>';
-            scores.forEach((score, index) => {
-                const position = index + 1;
-                const medal = position === 1 ? '🥇' : position === 2 ? '🥈' : position === 3 ? '🥉' : `${position}º`;
-                const isCurrentPlayer = score.name === playerName && score.score === totalScore;
-                
-                html += `<div class="leaderboard-entry" ${isCurrentPlayer ? 'style="background: #FFD700; border-radius: 5px; padding: 10px; margin: 5px 0;"' : ''}>
-                    <span>${medal} ${score.name}</span>
-                    <span>${score.score} pts</span>
-                </div>`;
+            if (systemData.admins.find(a => a.email === email)) {
+                alert('❌ Este email já está cadastrado!');
+                return;
+            }
+            
+            systemData.admins.push({ email, password });
+            saveSystemData();
+            updateAdminList();
+            
+            document.getElementById('new-admin-email').value = '';
+            document.getElementById('new-admin-password').value = '';
+            
+            alert('✅ Administrador adicionado com sucesso!');
+        }
+
+        function updateAdminList() {
+            const list = document.getElementById('admin-list');
+            list.innerHTML = '<h4>Administradores Cadastrados:</h4>';
+            
+            systemData.admins.forEach((admin, index) => {
+                const div = document.createElement('div');
+                div.innerHTML = `
+                    <p>${admin.email} 
+                    ${index > 0 ? `<button class="btn-admin btn-danger" onclick="removeAdmin(${index})">🗑️ Remover</button>` : '<span style="color: #666;">(Principal)</span>'}
+                    </p>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function removeAdmin(index) {
+            if (index === 0) {
+                alert('❌ Não é possível remover o administrador principal!');
+                return;
+            }
+            
+            if (confirm('Tem certeza que deseja remover este administrador?')) {
+                systemData.admins.splice(index, 1);
+                saveSystemData();
+                updateAdminList();
+                alert('✅ Administrador removido com sucesso!');
+            }
+        }
+
+        function addPartner() {
+            if (!isLoggedIn) return;
+            
+            const name = document.getElementById('partner-name').value;
+            const description = document.getElementById('partner-description').value;
+            const logo = document.getElementById('partner-logo').value;
+            
+            if (!name || !description) {
+                alert('❌ Preencha pelo menos nome e descrição!');
+                return;
+            }
+            
+            systemData.partners.push({ name, description, logo });
+            saveSystemData();
+            updatePartnersDisplay();
+            updatePartnersAdminList();
+            
+            document.getElementById('partner-name').value = '';
+            document.getElementById('partner-description').value = '';
+            document.getElementById('partner-logo').value = '';
+            
+            alert('✅ Parceiro adicionado com sucesso!');
+        }
+
+        function updatePartnersDisplay() {
+            const list = document.getElementById('partners-list');
+            
+            // Manter parceiros padrão e adicionar os customizados
+            const defaultPartners = `
+                <div class="partner-card">
+                    <div class="partner-logo">🏫</div>
+                    <div>
+                        <h3>Secretaria de Educação</h3>
+                        <p>Parceria fundamental para levar o PROERD às escolas estaduais e municipais.</p>
+                    </div>
+                </div>
+                <div class="partner-card">
+                    <div class="partner-logo">🏥</div>
+                    <div>
+                        <h3>Secretaria de Saúde</h3>
+                        <p>Apoio na prevenção e tratamento de questões relacionadas ao uso de substâncias.</p>
+                    </div>
+                </div>
+                <div class="partner-card">
+                    <div class="partner-logo">👨‍👩‍👧‍👦</div>
+                    <div>
+                        <h3>Conselho Tutelar</h3>
+                        <p>Proteção integral de crianças e adolescentes em situação de risco.</p>
+                    </div>
+                </div>
+            `;
+            
+            let customPartners = '';
+            systemData.partners.forEach(partner => {
+                customPartners += `
+                    <div class="partner-card">
+                        <div class="partner-logo">${partner.logo ? `<img src="${partner.logo}" alt="${partner.name}" style="width: 80px; height: 80px; object-fit: contain;">` : '🤝'}</div>
+                        <div>
+                            <h3>${partner.name}</h3>
+                            <p>${partner.description}</p>
+                        </div>
+                    </div>
+                `;
             });
             
-            leaderboard.innerHTML = html;
+            list.innerHTML = defaultPartners + customPartners;
         }
 
-        function restartGame() {
-            document.getElementById('final-screen').classList.remove('active');
-            document.getElementById('name-screen').classList.add('active');
-            currentPhase = 1;
-            currentQuestion = 0;
-            totalScore = 0;
-            playerName = '';
-            document.getElementById('player-name').value = '';
+        function updatePartnersAdminList() {
+            const list = document.getElementById('partners-admin-list');
+            list.innerHTML = '<h4>Parceiros Cadastrados:</h4>';
             
-            // Limpar elementos do jogo 2D
-            const container = document.getElementById('game-2d-container');
-            const obstacles = container.querySelectorAll('.obstacle');
-            const collectibles = container.querySelectorAll('.collectible');
-            obstacles.forEach(obs => obs.remove());
-            collectibles.forEach(col => col.remove());
+            systemData.partners.forEach((partner, index) => {
+                const div = document.createElement('div');
+                div.innerHTML = `
+                    <div class="partner-card">
+                        <div class="partner-logo">${partner.logo ? `<img src="${partner.logo}" alt="${partner.name}" class="partner-logo">` : '🤝'}</div>
+                        <div>
+                            <h4>${partner.name}</h4>
+                            <p>${partner.description}</p>
+                            <button class="btn-admin btn-danger" onclick="removePartner(${index})">🗑️ Remover</button>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
         }
 
-        // Permitir Enter para confirmar nome
+        function removePartner(index) {
+            if (confirm('Tem certeza que deseja remover este parceiro?')) {
+                systemData.partners.splice(index, 1);
+                saveSystemData();
+                updatePartnersDisplay();
+                updatePartnersAdminList();
+                alert('✅ Parceiro removido com sucesso!');
+            }
+        }
+
+        function updateLogos() {
+            if (!isLoggedIn) return;
+            
+            systemData.logos.proerd = document.getElementById('proerd-logo').value;
+            systemData.logos.pm = document.getElementById('pm-logo').value;
+            saveSystemData();
+            alert('✅ Logos atualizados com sucesso!');
+        }
+
+        // Controles por teclado
+        document.addEventListener('keydown', function(e) {
+            if (document.getElementById('game-3d-screen').classList.contains('active')) {
+                switch(e.key) {
+                    case 'ArrowLeft':
+                    case 'a':
+                    case 'A':
+                        startMove3D('left');
+                        break;
+                    case 'ArrowRight':
+                    case 'd':
+                    case 'D':
+                        startMove3D('right');
+                        break;
+                    case 'ArrowUp':
+                    case 'w':
+                    case 'W':
+                    case ' ':
+                        jump3D();
+                        break;
+                    case 'ArrowDown':
+                    case 's':
+                    case 'S':
+                        duck3D();
+                        break;
+                    case 'Enter':
+                        specialAction();
+                        break;
+                    case 'p':
+                    case 'P':
+                        pauseGame3D();
+                        break;
+                }
+                e.preventDefault();
+            }
+        });
+
+        document.addEventListener('keyup', function(e) {
+            if (document.getElementById('game-3d-screen').classList.contains('active')) {
+                if (['ArrowLeft', 'ArrowRight', 'a', 'A', 'd', 'D'].includes(e.key)) {
+                    stopMove3D();
+                }
+            }
+        });
+
+        // Enter para confirmar nome
         document.getElementById('player-name').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 setPlayerName();
             }
         });
 
-        // Controles por teclado para o jogo 2D
-        document.addEventListener('keydown', function(e) {
-            if (document.getElementById('game-2d-screen').classList.contains('active')) {
-                switch(e.key) {
-                    case 'ArrowLeft':
-                        startMove('left');
-                        break;
-                    case 'ArrowRight':
-                        startMove('right');
-                        break;
-                    case 'ArrowUp':
-                    case ' ':
-                        jump();
-                        break;
-                    case 'ArrowDown':
-                        duck();
-                        break;
-                }
-            }
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSystemData();
         });
 
-        document.addEventListener('keyup', function(e) {
-            if (document.getElementById('game-2d-screen').classList.contains('active')) {
-                if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-                    stopMove();
-                }
+        // Prevenir zoom em dispositivos móveis
+        document.addEventListener('touchstart', function(e) {
+            if (e.touches.length > 1) {
+                e.preventDefault();
             }
-        });
+        }, { passive: false });
+
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(e) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97564da982b9544c',t:'MTc1NjI0MjQ5NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97568f7df5d5544d',t:'MTc1NjI0NTE5MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
